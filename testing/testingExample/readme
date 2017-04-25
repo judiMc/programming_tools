@@ -1,0 +1,40 @@
+/*
+ Student information
+ Your Info here...
+*/
+
+/* 
+ Program Description
+ This program implements a basic structure for an integer array, it's used for demonstration purposes only.
+ Throughout the code, I've tried follow good coding standards.
+
+*/
+
+/*
+ How to compile.
+ Any Makefile options
+
+ To compile this code:
+ run: make
+
+ To compile test:
+ run: make test
+*/
+
+/*
+  How to run for every Makefile options. 
+  Make options:
+
+  make
+  make test
+  make clean
+*/
+
+/*
+ Limitations
+ Only handles integers this is not an ADT.
+*/
+
+/*
+ Known Issues.
+*/
