@@ -1,0 +1,184 @@
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\newenvironment{lyxlist}[1]
+{\begin{list}{}
+{\settowidth{\labelwidth}{#1}
+ \setlength{\leftmargin}{\labelwidth}
+ \addtolength{\leftmargin}{\labelsep}
+ \renewcommand{\makelabel}[1]{##1\hfil}}}
+{\end{list}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: GCC}
+\maketitle
+
+\section*{Overview}
+
+The GNU Compiler Collection better known as (GCC) is a set of compilers
+created by the GNU project. GCC is the main compiler used throughout
+the course to turn your source code into an executable. This review
+will introduce the usage of GCC and including a ``Getting Started''
+example, additional commands and command-line arguments.
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to:
+\begin{itemize}
+\item be aware of the GCC compiler task and main command line options
+\item identify potential language syntax errors within their source code
+\item utilize the GCC compiler to compile and link their source code into
+software
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+GCC is a set of compilers for many languages, originally GCC was originally
+made for only the C-programming language. A compiler is another computer
+program that converts your source code written in C and converts it
+into an executable machine language. When using GCC to create an executable
+the process has two stages the first compiles your software code and
+the second links all your code into a single executable. The executable
+machine language is contained within an object or .obj files produced
+by the compiler. The output from the compiler, ie the object files
+are combined together into a single executable file by the linker
+during the linking phase. Object files are the result of the compiler
+and the executable is the result of object files and the linker. The
+two stages in the process can be separated if needed or if the object
+files have not changed but the majority of the time we will combine
+the two phases in a single command.
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+To get started with GCC lets compile a single file from the command
+line, assume we have the file main.c that is basically empty but contains
+a print statement to say hello.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+#include <stdlib.h>
+int main(int argc, char** argv)
+{
+    printf("Hello\n");
+	return 0;
+} 
+\end{lstlisting}
+
+To compile and link this file use the following command.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// Compile and link code in the same command
+gcc main.c -o sayHello
+\end{lstlisting}
+
+This command compiles the code and creates an output file called sayHello,
+which is the name of your executable code. If you wanted to separate
+the compiling and linking code you would use to calls to GCC as such:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// The first command compiles, the second links the object files
+gcc -c main.c
+gcc main.o -o sayHello.
+\end{lstlisting}
+
+Separating the compile and linking steps for most of your programming
+will not produce any additional benefits, but is something worth knowing.
+
+If you want to review the options GCC provides for yourself here are
+some helpful command line calls.
+
+\begin{lstlisting}[language=make,tabsize=4,frame=TB]
+// To get additional help from the command line
+// Get the manual
+man gcc
+
+// For all help
+gcc --help
+
+//Or more specifc help are warning,common, target, and params are options.
+gcc --help=warning
+\end{lstlisting}
+
+
+\section*{Examples \label{sec:Examples} }
+
+Let's examine a couple more practical examples, compiling multiple
+files and adding additional flags. Case 1 demonstrates how to compile
+multiple .c files into a single executable by simply including the
+additional filenames.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+//Case 1
+gcc fileOne.c fileTwo.c -o outProgram
+\end{lstlisting}
+
+If you don't want to type out all of the files names to compile your
+program, you can use the wildcard '{*}' which indicates all files.
+If all your source files are properly stored in src directory, you
+could compile them with the following:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+//Case 1
+gcc ./src/* -I ./include
+\end{lstlisting}
+
+Notice the code ./src/{*} this indicates to include all files in the
+src directory, the -I command line argument indicates that the corresponding
+include or .h files can be found in the ./include directory. With
+proper project setup your code could be compiled and linked in a single
+command, however, the standard is to use MakeFiles ( A review on MakeFiles
+is also available ) or some form of automated project building to
+ease integretations of others trying to use your code and declare
+the exact actions the compiler will take
+
+\subsection*{Useful Flags\label{subsec: Useful flags}}
+
+The following is a list of common and helpful command line arguments
+or flags to use when running GCC. 
+\begin{lyxlist}{00.00.0000}
+\item [{-I}] indicates a location for header files, you can use it multiple
+times if needed.
+\item [{-c}] compile only no link
+\item [{-o}] output executable name
+\item [{-g}] enable debugging with GDB ( Please see GDB review for additional
+support)
+\item [{-std}] set to one of the C-Language standards here are some common
+values to set c89, c99, c11, gnu11, c++11 or c++14
+\item [{-Wall}] additional warnings will be check and evaluated
+\item [{-Wextra}] extra warnings and errors will be evaluated beyond -Wall
+\item [{-pedantic}] use strict standard
+\item [{-pedantic-errors}] Similar to pedantic but convert warnings to
+errors
+\end{lyxlist}
+
+\section*{Additional Information \label{sec:Additional-Information}}
+
+The following links provide valuable additional introductory documentation
+and examples.
+\begin{itemize}
+\item \url{https://gcc.gnu.org/}
+\item \url{https://gcc.gnu.org/onlinedocs/gcc/index.html#Top}
+\item \url{http://pages.cs.wisc.edu/~beechung/ref/gcc-intro.html}
+\end{itemize}
+
+\end{document}

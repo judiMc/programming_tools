@@ -1,0 +1,234 @@
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{textcomp}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+\newcommand*{\adt}{Linked List}
+\setcounter{section}{1}
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: Doxygen}
+\maketitle
+
+\section*{Overview}
+
+This review will cover an introduction to the Doxygen documenting tool.
+This review covers the basics of documentating functions definitions and generating
+HTML and LaTeX files from function definitions. Doxygen allows for a simple and elegant
+solution of creating documentation to allow ease for use of understanding how to use source code.
+Doxygen will be used throughout the course to create documentation.
+We will review the basic introduction to the
+topic, including a ``Getting Started'' example.
+
+\section*{Learning Outcomes}
+
+Upon successful completion of this review, students should be able
+to:
+\begin{itemize}
+\item use the Doxygen tool for documenting source code
+\item recognize the syntax of Doxygen's Doxyfile and comments
+\item apply Doxygen to generate HTML and LaTeX files that contain documentation of source code
+\item illustrate the importance and ease of documenting source code.
+\end{itemize}
+
+\section*{Introduction}
+
+In this review, we will cover the basics of:
+\begin{itemize}
+\item Doxygen
+\end{itemize}
+
+\section*{Getting Started}
+
+Please ensure that you're comfortable with material on general programming,
+and how to create useful documentation for code.
+
+\section*{Doxygen}
+
+Doxygen is a tool designed for generating documentation from annotated C++ sources,
+ but it also supports other popular programming languages such as C, Objective-C,
+ C\#, PHP, Java, Python, IDL (Corba, Microsoft, and UNO/OpenOffice flavors), Fortran, VHDL, Tcl, and to some extent D.
+
+To begin using Doxygen, it must first be downloaded or compiled from source. 
+Doxygen is supported by Linux x86-64, Windows, and Mac OS X 10.5 and later, though it may work on other machines.
+It's website url is www.doxygen.org/, where its binaries are available.
+Doxygen may be compiled from source with dependencies 'make' and 'cmake' on Unix-like machines.
+
+
+\begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
+	git clone https://github.com/doxygen/doxygen.git
+	cd doxygen
+
+	mkdir build
+	cd build
+	cmake -G "Unix Makefiles" ..
+	make
+
+	make install
+	
+\end{lstlisting}
+
+\medskip{}
+
+Once installed, the program may be invoked at command line via 'Doxygen' (case sensitive).
+Before we begin documenting source code, we may create a 'Doxyfile' used to modify
+our output file in the directory containing our programming project.
+
+\noindent \begin{center}
+\begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
+	cd [codeProject]
+	Doxygen -g [name]
+\end{lstlisting}
+\par\end{center}
+
+\medskip{}
+
+If the Doxyfile is not given a name, it defaults to 'Doxyfile', otherwise the file generated 
+will be the name that it is given in the [name] parameter. Now that we have this file,
+we may use it to parse our documentation. First, we need to create documentation.
+This review will demonstrate an example .h header C file and how to properly comment.
+
+\section*{Using Doxygen}
+
+This is an example .h file:
+
+
+\begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
+
+	struct Example{
+		int *z;
+	}
+	int add( int a, int b );
+	float div(int a, int b);
+	
+\end{lstlisting}
+
+\medskip{}
+
+At the moment, this header file has no documentation whatsoever. To another user, or even
+yourself at a future date, you may forget how to use these functions, and may not know what is to 
+be expected from their input and outputs. Reading source code is time consuming and often confusing.
+To fix this problem we must document the code using comments.
+
+Same .h file with two different types of Doxygen comments:
+
+\begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
+	
+	/**
+	 *@file example.h
+ 	 *@author Michael Ellis
+ 	 *@date April 2017
+ 	 *@brief Doxygen example fille.
+ 	 **/
+
+	/**Structure containing a pointer to an integer.*/
+	struct Example{
+		//This is for documenting struct elements.
+		int *z; ///<A pointer to an integer. 
+	}
+
+	/**This function takes in two integers, and adds them together. 
+	 *For example if we call the function with parameters of 3 and 4
+	 *the result is 3+4, which is 7.
+	 *@param a An integer that is to be added with another integer.
+	 *@param b An integer that is to be added with another integer.
+	 *@return a and b added together.
+	 *This can be mathematically expressed as a+b
+	 **/
+	int add( int a, int b );
+
+	//exclamation mark instead of two stars
+	/*!This function takes in two integers, and divides the first one by 
+	 *the second. The result of the function is a/b.
+	 *@param a The numerator.
+	 *@param b The denominator.
+	 *@pre b must not be zero, or else there will be division by zero.
+	 *@return a/b as floating point number.
+	 *If b is zero, return error code as 0.
+	 **/
+	float div(int a, int b);
+\end{lstlisting}
+
+For more on Doxygen comment blocks see the Doxygen tutorial :
+
+www.stack.nl/{\raise.17ex\hbox{$\scriptstyle\sim$}}dimitri/doxygen/manual/docblocks.html
+
+For more on Doxygen commands, such as 'param' see the Doxygen tutorial :
+
+www.stack.nl/~dimitri/doxygen/manual/commands.html
+
+
+\section*{Generating HTML and LaTeX}
+
+This sections provides an example of how to generate documentation files out of Doxygen comments.
+From the previous section, you had created a Doxyfile. We will now use that file in order to 
+finish documenting our commented file. We must now edit our Doxyfile using a text editor of choice.
+The file has quite a lot of detail, but this review will only provide an overview of the essentials.
+
+First, we will name our resulting documentation by modifying the 'PROJECT\_NAME' variable of our
+Doxyfile. You can name it whatever best fits your project.
+\begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
+	PROJECT_NAME           = "My Project"
+	
+\end{lstlisting}
+
+ Next, we may want to set our
+output directory, which is dictated by the variable: 'OUTPUT\_DIRECTORY'. This is generally
+named 'docs' to give users a standard name to search for when looking for documentation.
+
+\begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
+	OUTPUT_DIRECTORY       = docs
+	
+\end{lstlisting}
+Most importantly, we want to give our Doxygen the location of our file to be documented. 
+This is found from the 'INPUT' variable, and should be a path to your file, treating the location
+of your Doxyfile as the root directory. If your file was in a directory named 'include/' and your header file was named 'example.h'
+you would set my 'INPUT' variable as include/example.h.
+
+\begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
+	INPUT                  = include/example.h
+	
+\end{lstlisting}
+
+You may look at the other variables in the Doxyfile, as some
+of them may be relevant to your documentation.
+
+Once you have your Doxyfile configured. You can now generate HTML and LaTek files
+using the command:
+
+\begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
+	Doxygen [name of Doxyfile]
+	
+\end{lstlisting}
+
+Review the output of Doxygen to verify that there are no warnings or errors. Any undocumented
+elements will be reported by Doxygen.
+Finally, review the output files generated in your specified output directory.
+
+Doxygen has many more features not mentioned in this review. If you are interested in learning more about Doxygen,
+review its website's documentation:
+
+http://www.stack.nl/~dimitri/doxygen/manual/index.html
+
+\end{document}

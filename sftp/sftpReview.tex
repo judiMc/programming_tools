@@ -1,0 +1,101 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: SFTP}
+\maketitle
+
+\section*{Overview}
+
+SFTP stands for SSH or Secure File Transfer Protocol, it is used to
+securely transfer files between remote servers. It is useful for transfer
+files between your personal computer and the university development
+servers. We will review basic introduction to the topic, including
+a ``Getting Started'' example, and transferring files. 
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to:
+\begin{itemize}
+\item recognize the benefits of SFTP
+\item connecting to remote servers
+\item transferring files between remote machines
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+FTP is a very common network protocol used throughout the Internet
+similar to protocols such as TCP/IP or HTTP. It is used to securely
+transfer files between a client and server. SFTP is is similar to
+SSH in that it provides a secure session for user interaction.Review
+material for SSH is available in the course documents which demonstrates
+securely connecting to another remote machine. FTP can be used through
+an SSH session but the SSH produce is also used to authenticate the
+SFTP protocol.
+
+Transferring files can occur using the SFTP command or putty using
+the command line or more commonly through an application interface
+such as FileZilla, WinSCP, or FireFTP.
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+SFTP is a command run from the terminal 
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+sftp yourUserName@general.uoguelph.ca
+\end{lstlisting}
+. If you have trouble connecting you can try connecting with SSH first.
+Once you have used the SFTP command and connected using your password.
+You can identify the list of available commands by typing '?'. To
+transfer files use the command
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+get remoteFile localFile
+\end{lstlisting}
+. Alternatively, if you want to put a file on a remote host, use the
+following command:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+put yourUserName@general.uoguelph.ca
+\end{lstlisting}
+.
+
+Filezilla is an application that manages the SFTP connection and provides
+an easy to use GUI for transferring files between client and the survey.
+To get started download the FileZilla client application. In the Filezilla
+network options you will need to provide the same network information
+used to connect to the linux.socs.uoguelph.ca site, this includes
+your username, the server (linux.socs.uoguelph.ca), and your password.
+A small tutorial for the Filezilla user interface is available at
+\url{https://wiki.filezilla-project.org/FileZilla_Client_Tutorial_(en)}.
+Once you've established a connection with Filezilla, transferring
+files will be a simple drag-and-drop interface between the client
+and the server.
+
+\section*{Additional Information \label{sec:Additional-Information}}
+\begin{itemize}
+\item \url{https://filezilla-project.org/}
+\item \url{https://www.digitalocean.com/community/tutorials/how-to-use-sftp-to-securely-transfer-files-with-a-remote-server}
+\end{itemize}
+
+\end{document}

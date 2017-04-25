@@ -1,0 +1,148 @@
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\newenvironment{lyxlist}[1]
+{\begin{list}{}
+{\settowidth{\labelwidth}{#1}
+ \setlength{\leftmargin}{\labelwidth}
+ \addtolength{\leftmargin}{\labelsep}
+ \renewcommand{\makelabel}[1]{##1\hfil}}}
+{\end{list}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: Tar and GZIP}
+\maketitle
+
+\section*{Overview}
+
+Tar and GZIP are two programs used to create and extract compressed
+archives of files. This process is also known as zipping or compressing
+files, is the process of grouping and compress the size of a set of
+files. In order to submit your labs and assignments throughout the
+course, you will need to submit compressed archived files. This review
+introduces the basic usage concepts of Tar and GZIP tools, including
+a ``Getting Started'' example, and some useful common-line arguments.
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to:
+\begin{itemize}
+\item recognize the benefits of using an archiving program
+\item archive and underachieve your projects for submission
+\item apply command-line arguments to modify archives
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+GZIP(GNU Zip) and Tar ( Tape Achiever) are two programs used in combination
+to create a compressed archive or also known as zip file. Compressed
+archives are a simple method of keeping all your information together
+and reducing the file size. Compressing your files minimizes the space
+the files use on the system and the time to transfer the files. The
+first part of creating a compressed archive is to organize all of
+the desired files into a single archive or tar file, this uses the
+tar command. The second part is the compression phase, which compresses
+all the files within the tar file using gzip or an equivalent program.
+Tar archives should use the extension .tar, while GZIP compressed
+files will have the extension .gz. If Tar and GZIP have been used
+in combination, the compressed archive will often have both extensions
+in the form ``.tar.gz''. Tar and GZIP are so frequently used together,
+that it is easy to forget that are different programs, especially
+as many of the command-line arguments provide by tar support functionality
+available in GZIP.
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+To get start lets create a tar archive from a programming project,
+with the following command line call:
+
+\begin{lstlisting}[language=make,tabsize=4,frame=TB]
+tar cvf myProject.tar ./myProjectDirectory 
+\end{lstlisting}
+
+The command-line arguments perform the following actions:
+\begin{lyxlist}{00.00.0000}
+\item [{c}] create a new .tar archive named myProject.tar
+\item [{v}] the verbose flag provides additional output from the program
+\item [{f}] indicates the tar filename was provided
+\end{lyxlist}
+This call will create a tar file named myProject.tar, when the program
+runs it will output all files and paths that have been included in
+the tar archive. If you wanted to also compress the tar file at the
+same time as creating it, you only need to add the z command line
+argument and change the output filename to reflect that it is now
+compressed. If you want to list or extract the contents of a compressed
+gz file, you can use the following commands.
+
+\begin{lstlisting}[language=make,tabsize=4,frame=TB]
+// Create a compressed tar
+tar cvfz myProject.tar.gz ./myProjectDirectory
+
+// List files in compressed tar
+gzip -l myProject.tar.gz
+
+//Extract tar file from compressed file
+gzip -d myProject.tar.gz
+\end{lstlisting}
+
+Extract a tar.gz file using gzip will give you the original tar archive,
+however, you'll probably want to extract the original contents from
+within the tar file. To remove the contents from a tar or tar.gz file
+use the 'x' command-line parameter 
+
+\begin{lstlisting}[language=make,tabsize=4,frame=TB]
+// Extract file contents from compression file
+tar xvf myProject.tar.gz
+
+// Extract file from tar
+tar xvf myProject.tar
+\end{lstlisting}
+
+
+\subsection*{Variables \label{subsec:Variables}}
+
+Tar contains several useful command-line arguments, this list contains
+some of the more common command-line arguments:
+\begin{lyxlist}{00.00.0000}
+\item [{-d}] find the difference between archive to file system
+\item [{-r}] append files to archive
+\item [{-t}] list the contents of tar
+\item [{-u}] update only archive that are new or changed files
+\item [{-x}] extract files from tar or gz
+\item [{-f}] give filename of tar or zip
+\item [{-c}] create an archive
+\item [{-z}] compress the tar files
+\item [{-v}] verbose
+\item [{\textendash delete}] delete files form archives
+\end{lyxlist}
+
+\section*{Additional Information \label{sec:Additional-Information}}
+\begin{itemize}
+\item \url{http://www.tecmint.com/18-tar-command-examples-in-linux/}
+\item \url{https://www.gnu.org/software/tar/}
+\item \url{https://www.howtogeek.com/248780/how-to-compress-and-extract-files-using-the-tar-command-on-linux/}
+\item \url{http://linuxcommand.org/man_pages/tar1.html}
+\end{itemize}
+
+\end{document}

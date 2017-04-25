@@ -1,0 +1,310 @@
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{url}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: Make Files}
+\maketitle
+
+\section*{Overview}
+
+A Makefile is a text file containing a simple set of instructions
+to run your program, it indicates which files should be compiled and
+defines common commands. Makefiles are a fundamental component that
+must be integrated into the development of your labs and assignments
+throughout the course. We will review basic introduction to the topic,
+including a ``Getting Started'' example, and some common best practice 
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to:
+\begin{itemize}
+\item recognise the benefits of make and makefile 
+\item create makefile variables and rules
+\item develop your own makefile for labs and assignments
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+A makefile is a simple text file, that is built in any text editor,
+it contains rules for performing tasks or running commands, such as
+compiling and linking your program. The makefile is used by the program
+make ( https://www.gnu.org/software/make/) to customise the behaviour
+of the compilation tools and the output produced. The makefile contains
+rules and instructions for building your specific project, it contains
+similar commands to those manually typed into the command line to
+compile your project. The main benefits of using a makefile are that
+it reduces the number of commands you have to continuously write to
+recompile or test your code, it also only recompiles code that has
+changed and it can or partially be reused between labs and projects.
+
+A makefile consists of a number of rules, each rule is defined in
+the using a specific format.
+\begin{center}
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+name: dependencies
+	system command(s)
+\end{lstlisting}
+\par\end{center}
+
+Each rule will follow this format, it essentially has three parts.
+The first part is the rule name which can be anything you want. The
+second part is the rule's dependencies this indicates what files and
+references your rule will need to complete. For example, perhaps you
+submitted a .c and .h file these will depend on each other. The final
+part of a rule is the system commands which run a command with the
+dependencies, this will be empty or single or set of system commands,
+system commands can be tested in your command line before putting
+them into a makefile. Notice that the system commands are indented
+with a tab, in makefiles the differences between tabs and spaces is
+important. You must use tabs instead of spaces for indentation of
+any commands in your make files, otherwise, you will experience compile
+errors on the otherwise functional code.
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+The make program should be installed on all university computer science
+machines, if you type make without a makefile into the command line
+you should receive an error indicating '{*}{*}{*} no targets specified
+.... '. If you name your makefile 'makefile', the make program will
+automatically use it, if your makefile has a unique name, you will
+have to use the command ``make -f yourMakeFileName''. Let's develop
+a simple example to demonstrate rule creation, the following code
+would be in the makefile.
+
+\begin{lstlisting}[language=make,tabsize=4,frame=TB]
+sayHello: 
+	@echo 'hello'
+
+clear:
+	clear; ls
+\end{lstlisting}
+
+In this example, we have created two rules one called 'sayHello' and
+another called 'clear'. Both rules call a system command, the 'sayHello'
+rule calls echo and 'clear' rule calls clear then calls list. Our
+first rules 'sayHello', is the default rule that will be run automatically
+if you type make in the command line. The response should be 'hello'
+written back in the console. Notice, we have to put @ symbol in front
+of echo command, this suppresses other output by make, and simply
+echo's the statement 'hello'. For more information on the echo command,
+please see ( https://www.gnu.org/software/make/manual/html\_node/Echoing.html).
+Our second rule 'clear', first clears the screen and then runs ls
+command to list files in the current directory. You can run a specific
+rule by typing: ``make yourRuleName'', in this case, run: ``make
+clear'' without quotes. The result of running this rule is the screen
+is cleared and your files should be listed on the top line. If you
+have multiple commands you which to run within the same rule you can
+separate commands by using ';'.
+
+\subsection*{Variables \label{subsec:Variables}}
+
+In order to create your own variables in a makefile simply type, variableName
+= someValue. To use the value of your variable in the makefile simply
+enclose it in \$(yourVariable) such as \$(CC). Here are some common
+variables you'll see in this course:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+# This is a comment in a makefile.
+CC = gcc
+CFLAGS = -Wall
+OBJDIR = obj/
+
+# To display the value of a variable you can use.
+@echo $(CC)
+\end{lstlisting}
+
+
+\section*{Examples \label{sec:Examples} }
+
+Let's examine a more practical example, here is an example of a makefile
+that contains code to build a program for array example and the array
+test cases.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+# Flags that are sent to the compiler
+CC          =   gcc 
+CFLAGS      =   -Wall -std=c99 -pedantic -g
+
+#Directories where the compiler can find things
+INCLUDES    = -Iinclude
+
+# add directory names here if you want to separate files by directories
+BINDIR = bin/
+SRCDIR = src/
+OBJDIR = obj/
+
+#Put the names of your source code file in the lines below.
+SOURCE = $(SRCDIR)test.c $(SRCDIR)array.c $(SRCDIR)testMain.c 
+OBJS = $(OBJDIR)test.o $(OBJDIR)array.o
+
+#The names of the binary programs that will be produced. 
+PROGNAME = $(BINDIR)arrayExample.out
+PROGTEST = $(BINDIR)arrayTest.out
+
+# This target (command) handles the basic make, creates a program with program Name 
+# Note this  command doesn't actually build all, it build the main program only, ie not the tests. 
+
+all : program test
+
+program: $(OBJS) $(OBJDIR)main.o  
+      $(CC) $(OBJS) $(OBJDIR)main.o -o $(PROGNAME)
+
+# This target (command) handles make test 
+test: $(OBJS) $(OBJDIR)testMain.o  
+      $(CC) $(OBJS) $(OBJDIR)testMain.o -o $(PROGTEST)
+
+# Below here are targets for *.o
+$(OBJDIR)array.o: $(SRCDIR)array.c   
+     $(CC) $(CFLAGS) $(INCLUDES) -c $(SRCDIR)array.c -o $(OBJDIR)array.o
+
+$(OBJDIR)test.o: $(SRCDIR)test.c     
+	  $(CC) $(CFLAGS) $(INCLUDES) -c $(SRCDIR)test.c -o $(OBJDIR)test.o
+
+$(OBJDIR)testMain.o: $(SRCDIR)testMain.c  
+      $(CC) $(CFLAGS) $(INCLUDES) -c $(SRCDIR)testMain.c -o $(OBJDIR)testMain.o
+
+$(OBJDIR)main.o: $(SRCDIR)main.c
+	  $(CC) $(CFLAGS) $(INCLUDES) -c $(SRCDIR)main.c -o $(OBJDIR)main.o
+
+# This is another make command, run: make clean and it removes *.o and programs.
+# You can make similar commands to perform different common actions. 
+clean:   @ rm $(OBJDIR)*.o  $(BINDIR)$(PROGNAME) $(BINDIR)$(PROGTEST) 
+\end{lstlisting}
+
+
+\subsection*{Example Walk through \label{subsec:Example-Walk-through}}
+
+The first section (shown again below) sets a number of variables about
+our project, a variable (CFLAGS) for the flags we want to pass to
+our compiler, INCLUDES variable for the compiler to know the directory
+where to look for include files ( .h ). SOURCE and OBJS variables
+set to store our .c files and object files respectively. Note that
+we will create the individual rules for generating our object files
+further down in the makefile.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+# Flags that are sent to the compiler
+CC          =   gcc 
+CFLAGS      =   -Wall -std=c99 -pedantic -g
+
+#Directories where the compiler can find things
+INCLUDES    = -Iinclude
+
+# add directory names here if you want to separate files by directories
+BINDIR = bin/
+SRCDIR = src/
+OBJDIR = obj/
+
+#Put the names of your source code file in the lines below.
+SOURCE = $(SRCDIR)test.c $(SRCDIR)array.c $(SRCDIR)testMain.c 
+OBJS = $(OBJDIR)test.o $(OBJDIR)array.o
+
+#The names of the binary programs that will be produced. 
+PROGNAME = $(BINDIR)arrayExample.out
+PROGTEST = $(BINDIR)arrayTest.out
+\end{lstlisting}
+
+The second section of the makefile creates three rules. The first
+rule called 'all' is the default rule that simply tells make to run
+both program and test rules. The second rule called 'program' compiles
+our program, it uses the object files as the dependencies and the
+system call is the GCC call to compile with our object Files and rename
+the executable to our program name. The proper object files have not
+been created at this point, thus the program must use some of the
+.o rules to create the appropriate .o files. The third command called
+'test', does exactly the same thing as 'program' command but using
+a different main to run the tests instead of the program and renames
+the executable to arrayTest.out.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+all : program test
+
+program: $(OBJS) $(OBJDIR)main.o  
+      $(CC) $(OBJS) $(OBJDIR)main.o -o $(PROGNAME)
+
+# This target (command) handles make test 
+test: $(OBJS) $(OBJDIR)testMain.o  
+      $(CC) $(OBJS) $(OBJDIR)testMain.o -o $(PROGTEST)
+\end{lstlisting}
+
+Next, our makefile needs rules to develop all of the object files
+to properly compile this program. Below is the original code to compile
+all of the object files, each rule uses the compiler and compiler
+flags to combine the source file (.c) and uses the Includes variable
+to include the directory for the proper header file. Most of the variables
+in this example are pointing to the position of the files in their
+directories.
+
+\begin{lstlisting}[language=make]
+# Below here are targets for *.o
+$(OBJDIR)array.o: $(SRCDIR)array.c   
+     $(CC) $(CFLAGS) $(INCLUDES) -c $(SRCDIR)array.c -o $(OBJDIR)array.o
+
+$(OBJDIR)test.o: $(SRCDIR)test.c     
+	  $(CC) $(CFLAGS) $(INCLUDES) -c $(SRCDIR)test.c -o $(OBJDIR)test.o
+
+$(OBJDIR)testMain.o: $(SRCDIR)testMain.c  
+      $(CC) $(CFLAGS) $(INCLUDES) -c $(SRCDIR)testMain.c -o $(OBJDIR)testMain.o
+
+$(OBJDIR)main.o: $(SRCDIR)main.c
+	  $(CC) $(CFLAGS) $(INCLUDES) -c $(SRCDIR)main.c -o $(OBJDIR)main.o
+\end{lstlisting}
+
+At this point, the makefile contains all rules required to properly
+build your project, the test program, or any of specific object file.
+The last section contains helper functions to be used during development.
+Finally, we make one rule to clean our project, you should clean your
+project before zipping for submission or if one of the object files
+appears to be stale and is not being updated properly.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+# This is another make command, run: make clean and it removes *.o and programs.
+# You can make similar commands to perform different common actions. 
+clean:   @ rm $(OBJDIR)*.o  $(BINDIR)$(PROGNAME) $(BINDIR)$(PROGTEST) 
+\end{lstlisting}
+
+To use the makefile 
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+#Build everything your project
+make
+
+# Build only the test project
+make test
+
+# Rebuild your array object file
+make /obj/array.o
+
+# Clean your project for submission
+make clean
+\end{lstlisting}
+
+
+\section*{Additional Information \label{sec:Additional-Information}}
+
+The creation of rules for each header and source file can become tedious
+with larger projects, for additional resources on how to use built
+in macros to build rules, check out this good reference \url{https://www.cs.rochester.edu/\textasciitilde{}nelson/courses/csc\_173/review/make.html}.
+\end{document}

@@ -1,0 +1,106 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: MD5}
+\maketitle
+
+\section*{Overview}
+
+MD5 is an algorithm used to create a 128-bit hash value. Initially
+MD5 was created for security purposes but it no longer is the most secure way to encrypt
+information.  However, it is an accessible introduction to using encryption.  This review covers a basic
+introduction to the topic, including a ``Getting Started'' example,
+and some common applications.
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to:
+\begin{itemize}
+\item recognize the applications of MD5
+\item generate MD5 hashes
+\item use MD5 to validate data
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+MD5 was an algorithm originally created for security, however the
+algorithm has several vulnerabilities that make it no longer suitable
+for protection. Now MD5 is mainly used for data validation and integrity,
+via checksums. MD5 is a hash function that hash values of 128 bits.
+MD5 is mainly a method of quickly evaluating transmitted data, they
+check the data by using a hash function that creates a summation of
+the binary data. Checksums do not 100\% guarantee the integrity of
+the transmitted data is correct Although, it's very unlikely that
+the hash value of corrupted data will match the hash value of a successful
+transferred file it can occur.
+
+MD5 checksums known as md5sum, occurs on many servers, as an initial
+step in validation.
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+To generate a md5sum for your text or data, in the terminal of a Linux
+system, type:
+\begin{center}
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+echo -n "Your Text" | md5sum
+\end{lstlisting}
+\par\end{center}
+
+This creates a md5 checksum of whatever text you've written, if you
+change the text a different hash value will be created. Echo -n is
+an option that does not excludes the additional line break included
+by echo. Then your text is piped into md5sum to create a hash value.
+The expected MD5sum result should be provided to server when downloading
+and a match can be validated once transfer is completed.
+
+Creating a hash for a number of files to be transferred can be done
+as follows:
+\begin{center}
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+md5sum filetohashA.txt filetohashB.txt filetohashC.txt > hash.md5
+\end{lstlisting}
+\par\end{center}
+
+If you view the hash.md5 file you will see a similar 128-bit hash
+value for each file. If you want to check the md5sum are correct,
+use the -c option.
+\begin{center}
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+md5sum -c hash.md5
+\end{lstlisting}
+\par\end{center}
+
+\section*{Additional Information \label{sec:Additional-Information}}
+
+The following links can provide useful additional information on MD5:
+
+\url{http://www.makeuseof.com/tag/md5-hash-stuff-means-technology-explained/}
+
+\url{https://en.wikipedia.org/wiki/MD5}
+
+\url{https://www.go4expert.com/articles/md5-tutorial-t319/}
+\end{document}

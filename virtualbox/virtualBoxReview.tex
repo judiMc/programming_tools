@@ -1,0 +1,95 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+\makeatother
+
+\usepackage{babel}
+\begin{document}
+
+\title{Review: Virtualbox}
+\maketitle
+
+\section*{Overview}
+
+Virtualbox is a useful tool for emulating different operating systems
+or specific hardware. When developing software for a specific system,
+if you are unable to use the exact software or exact hardware, the
+next best thing is to use an emulator to mimic the behavior of the
+physical environment. This review will introduce Virtualbox and some
+helpful resources for getting started.
+
+We have a virtualbox-ready image of the SOCS linux system that you can download and install on your own computer if you wish to have a linux system to work on without connecting via ssh or nomachine.   Check the course website for information.
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to:
+\begin{itemize}
+\item recognize the benefits of virtual box
+\item be aware of helpful resources for getting setup
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+Virtualbox is a virtualization system which allows users to run one
+or more operating systems on the same machine at the same time. The
+virtualized system mimics the behavior of an actual physical system.
+Creating an environment developers can use to build and test their
+software without having access to the real requirements. Virtualization
+systems do their best to replicate the actual environment but there
+will be differences between the virtual system and real system. Virtualization
+allows for installation to be standardized and reduces the cost of
+requiring a physical machine for each testing environment.
+
+The original operating system and physical hardware are referred to
+as the host system, any virtual environments that are setup are called
+clients. The host environment is protected from the actions that occur
+on client systems via a process called sandboxing. Sandboxing means
+that the software has restricted access to only a small amount of
+memory space preallocated on the host system.
+
+The Virtualbox website is located at \url{https://www.virtualbox.org/}and
+is available for all major operating systems, to get started download
+the VirtualBox need for your host system at \url{https://www.virtualbox.org/wiki/Downloads}.
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+The process of getting setup on VirtualBox is beyond the scope of
+this review and the official getting started guide is update-to-date
+and maintained (See Section 1.6 of \url{https://www.virtualbox.org/manual/ch01.html}
+). Virtualization systems use the resources of the host thus when
+getting started you will want to select options that ensure both the
+host and client have enough resources to operate. 
+
+During VirtualBox setup, a user can specify different operating system
+features to emulate, such as the size of the hard-drive or the amount
+of RAM. If you which to use a premade operating system, many virtual
+OS systems are setup at \url{http://www.osboxes.org/}.
+
+Once you've installed the basic Virtualbox certain features will be
+useful such as installing guest additions which allows many features
+to interact between client and host setup ( \url{https://www.virtualbox.org/manual/ch04.html}
+)
+
+\section*{Additional Information \label{sec:Additional-Information}}
+\begin{itemize}
+\item \url{https://www.virtualbox.org/manual/ch01.html#idm26}
+\item \url{http://www.osboxes.org/}
+\item \url{http://www.wikihow.com/Install-VirtualBox}
+\end{itemize}
+
+\end{document}

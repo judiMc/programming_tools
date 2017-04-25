@@ -1,0 +1,7 @@
+*.log
+*.lyx~
+*.out
+*.aux
+*.gz
+*.pdf
+.DS_Store

@@ -1,0 +1,121 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: Valgrind}
+\maketitle
+
+\section*{Overview}
+
+Valgrind is a suite of tools packaged together to provide additional
+debugging, memory checking, and profiling capabilities. This review
+will introduce Valgrind and demonstrate how to get started with the
+suite of tools for evaluating your source code.
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to:
+\begin{itemize}
+\item different the benefits and capabilities of Valgrind
+\item use Valgrind to evaluate your software project
+\item maximize testing efficiency by using a range Valgrind tools
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+Valgrind is a suite of tools packaged together to provide improved
+run-time debugging and memory checking. Valgrind is best supported
+through Linux and Mac OS. Valgrind operates on your executable by
+adding additional debugging information. The most popular Valgrind
+tool is memcheck which detects memory-management problems, such as
+memory leaks or invalid frees. Memcheck is a very useful tool for
+identifying potential run time errors related to memory problems.
+Other Valgrind tools search for memory usage problems in the cache,
+the heap, or threads.
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+To get started with Valgrind, compile your project and create an executable.
+The review material on GCC or Makefiles can help you get started with
+compiling your code. Once the executable is compiled and linked, you
+can use Valgrind to evaluate your program by running:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+Valgrind ./yourExecutableName
+\end{lstlisting}
+
+By default, Valgrind runs only memcheck, the output from memcheck
+can be quite verbose. The output from Valgrind-memcheck contains three
+portions, the first is the program output, followed by two summary
+sections for the heap and leaks. The summary section can be extended
+by rerunning Valgrind with \textendash leak-check-full command line
+parameter. By default, Valgrind will indicate how many blocks of memory
+where used and freed. If a memory leak does occur and you run Valgrind
+with the \textemdash leak-check-full command you will be provided
+with additional information on the leak. Additional information can
+include the name of the variable, the line number the object was created
+on, and the filename. The caveat to using memcheck is that certain
+static and global variables might not appear to have proper memory
+management because they are not freed until the very end of the program. 
+
+Here is an example of some of the output you might see from memcheck.
+
+\begin{lstlisting}[language=make,basicstyle={\scriptsize},showstringspaces=false,tabsize=4,frame=TB]
+==4560== HEAP SUMMARY:
+==4560==     in use at exit: 20 bytes in 2 blocks
+==4560==   total heap usage: 5 allocs, 3 frees, 1,072 bytes allocated
+==4560== 
+==4560== LEAK SUMMARY:
+==4560==    definitely lost: 16 bytes in 1 blocks
+==4560==    indirectly lost: 4 bytes in 1 blocks
+==4560==      possibly lost: 0 bytes in 0 blocks
+==4560==    still reachable: 0 bytes in 0 blocks
+==4560==         suppressed: 0 bytes in 0 blocks
+==4560== Rerun with --leak-check=full to see details of leaked memory
+==4560== 
+==4560== For counts of detected and suppressed errors, rerun with: -v
+==4560== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+\end{lstlisting}
+
+To change tools from memcheck, use the \textendash tool= command line
+parameter. The other tools are named Cachegrind (Cache Profiler),
+Callgrind (Cache Extension), Massif (Heap Profiler), Helgrind (Thread
+Debugger ), DRD ( Multithreaded errors).
+
+Here is an example of using the Valgrind with Cachegrind tool.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+Valgrind --tool=cachegrind ./yourExecutableName
+\end{lstlisting}
+
+
+\section*{Additional Information \label{sec:Additional-Information}}
+\begin{itemize}
+\item \url{http://Valgrind.org/docs/manual/quick-start.html}
+\item \url{http://Valgrind.org/info/tools.html}
+\item \url{http://cs.ecs.baylor.edu/~donahoo/tools/Valgrind/}
+\end{itemize}
+
+\end{document}

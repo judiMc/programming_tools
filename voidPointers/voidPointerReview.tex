@@ -1,0 +1,332 @@
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+%\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+\newcommand*{\adt}{Linked List}
+\newcommand*{\submissiontype}{-SET VALUE HERE-}
+\newcommand*{\checkhref} { *** }
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: Void Pointers}
+\maketitle
+
+\section*{Overview}
+
+This review will cover an introductory to pointers . This review cover
+the basic introductory material, that was provided in other required
+courses. Pointers are a fundamental component that must be integrated
+into the development of your labs and assignments throughout the course.
+We will review basic introduction to the topic, including a ``Getting
+Started'' example, and some common best practices.
+
+\section*{Learning Outcomes}
+
+Upon successful completion of this review, students should be able
+to:
+\begin{itemize}
+\item describe the key benefits of pointers
+\item explain the difference between referencing and dereferencing pointers
+\item apply pointers to the development of an abstract data type
+\item manage pointers to reduce memory leaks and errors
+\end{itemize}
+
+\section*{Introduction}
+
+In this review we will cover the basics of :
+\begin{itemize}
+\item pointers
+\item void pointers
+\end{itemize}
+
+\section*{Getting Started}
+
+\subsection*{Declaring and Initializing Pointers}
+
+A pointer variable is a variable that points to the memory address
+of a variable. That is a pointer is similar to the idea of a container
+that contains another variable. For a full reference to pointers review,
+see (\checkhref C01-f16-notes Wang). Pointers are declared similar
+to other variables except it now includes the {*} operator, this signals
+that this variable is a pointer. To declare a pointer to an integer
+or a character pointer use the following formats:
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	int* ptr;
+	char* chPtr;
+\end{lstlisting}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\medskip{}
+
+It is generally a good idea to give your pointer a default value or
+initialize the pointer if you have no value to set your pointer to
+when declared point it to a null. Null is a standard value which can
+be evaluated in expressions such as if-statements to indicate no value.
+
+\medskip{}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	int* ptr = null;
+	char* chPtr = null;
+\end{lstlisting}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\subsection*{Assigning Pointers}
+
+When working with pointers, you have two operators to work with get
+the different information about the pointer. The \& symbol refers
+to the memory address (also known as the reference operator), the
+{*} symbol references the value at that address (known as the dereference
+operator). Most often when you're pointing to a variable you'll use
+the \& symbol to reference the address and when you're working with
+the data you'll use the {*} to dereference the memory address for
+a value.
+
+\medskip{}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	int a = 5;
+	
+	// We point to the memory space
+	int *aptr = &a;
+	
+	// we want the value at memory space 'a', ie the number 5
+	int b = *a;
+\end{lstlisting}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\subsection*{Static vs Dynamic Memory}
+
+Pointers can point to static or dynamic memory, for a full reference
+of static and dynamic memory please see (\checkhref C01-f16-notes
+Wang). Dynamic memory is any memory space you specifically allocate
+with a malloc command, if you allocate memory you must also free it
+after your program has finished using it.
+
+\medskip{}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	//Examples of static memory
+	int n;
+	char str[6];
+	
+	// Examples of dynamic memory with 100-character string called description
+	char *description = null;
+	description = malloc( 100 * sizeof(char)
+	....
+	
+	// Later we must release this allocated memory.
+	free(description)
+\end{lstlisting}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\subsection*{Void Pointers}
+
+A void pointer is similar to a regular pointer, except that the type
+is not declared, it could be considered a generic pointer. Void pointers
+are useful for algorithms and data structures that perform operations
+independent of the type of data. For instance, a sorting algorithm
+performs exactly the same independent of the data, as long as the
+sorting algorithm knows how to compare two items. To declare a void
+pointer, follow the same format as any other pointer.
+
+\medskip{}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	void * voidPtr;
+\end{lstlisting}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\medskip{}
+
+Consider that a void pointer hasn't declared a type and thus it can
+be used to a point to any variable. Pointers can be assigned to static
+variables or can allocate new memory, in these examples we point to
+static variables.
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	void * voidPtr;
+	int a = 5;
+	float b = 3.57;
+	
+	/*
+	 Assign void pointer to the address of a
+	 meaning voidPtr points the memory space for variable a
+	*/
+	voidPtr = &a;
+	
+	// Later we can reassign voidPtr to b;
+	voidPtr = &b;
+\end{lstlisting}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\subsubsection*{Casting Void Pointers}
+
+The void pointer still remains 'typeless', ie void, but it now points
+to a memory location or variable with a type. If we want to use the
+information or data in our void pointer, it needs to successfully
+cast to a type. For instance, if we want to print a void pointer,
+you'll have to cast it to the type contained within the void pointer.
+
+\medskip{}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	void * voidPtr;
+	int a = 5;
+	float b = 3.57;
+	
+	// Assign void pointer to the address of a
+	// meaning voidPtr points the memory space for variable a
+	voidPtr = &a;
+	print("a void pointer to an integer %d", *( (int*) voidPtr) );
+	
+	// Later we can reassign voidPtr to b;
+	voidPtr = &b;
+	
+	// To print our float
+	print("A void pointer to an integer %f", *( (float*) voidPtr) );
+	
+\end{lstlisting}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\medskip{}
+
+The main part of this example is casting the voidPtr to another type,
+let's consider what is happening in the cast. Recall to cast a variable
+to another variable, we wrap the new type in (newVariableType) .From
+the previous example consider this code: {*}( (int{*}) voidPtr), it
+contains two parts, the middle (int{*}) voidPtr and the outer dereference:
+{*}( the first part). A quick reminder in casting and pointers is
+shown below:
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	int i = 65;
+	char ch = (char)i;
+	
+	// (char*) casts to a character pointer
+	int *iptr = &i;
+	char *chPtr = (char*)iptr;
+\end{lstlisting}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\medskip{}
+
+This first statement (int{*}) voidPtr casts to an integer pointer
+from our original void pointer. The second part of the original statement
+is {*}( the first part) dereferences the now integer pointer to get
+the actual value store in that memory location of our void pointer.
+
+\medskip{}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	// In multiple setups this code: *( (int*) voidPtr)
+	// is equivalent to
+	
+	int * intPtrFromVoid = (int*)voidPtr;
+	print("A void pointer to an integer %d", *intPtrFromVoid );
+	
+\end{lstlisting}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\subsubsection*{When to Cast Data}
+
+As mentioned void pointers work well when you don't need to know the
+type of the data, such as inserting data into a data structure. When
+you need to know the data type of the void, for instance, to print
+the value, you'll have to cast it to the appropriate data type.
+
+\medskip{}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	// Keeping your functions generic with void pointers.
+	void insertData( Container* c, void * voidPtr){
+		c->insert(voidPtr);
+	}
+	
+	// Cast when you need to know the type.
+	void printContainerItem( void * containerItem ){
+		int* intPtr = (int*) containerItem;
+		print("%d", *intPtr);
+		...
+	}
+\end{lstlisting}
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\section*{Best Practices}
+
+Pointers and void pointers can take a bit of practice to become confident
+using in your daily applications. A suggestion when working with pointers
+is to remove some of the ugly and difficult to read syntax that inheritance
+comes along with pointers. One suggestion is to improve the readability
+of your code by using typedefs.
+
+\rule[0.5ex]{1\columnwidth}{1pt}
+
+\begin{lstlisting}[tabsize=4]
+	/* 
+	Pointers are more difficult to look at .... lets change that.
+	Typedefs take the original name and making an alias for it.
+	The form is: typedef oldName newName
+	To improve the readability of void pointers, we can use
+	*/
+	typedef void* VoidPtr;
+	
+	/*
+	Now this statement looks more like the variables
+	we're used to....although you still have to manage the memory.
+	*/
+	VoidPtr myData;	
+\end{lstlisting}
+
+\end{document}

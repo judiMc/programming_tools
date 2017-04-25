@@ -1,0 +1,318 @@
+%% LyX 2.2.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: CppCheck}
+\maketitle
+
+\section*{Overview}
+
+CppCheck is a static analysis tool for C-based programming languages,
+such as C and C++. Static analysis tools evaluate source code looking
+for bugs beyond language specific syntax. This review introduces the
+Cppcheck tool and how it can be used to evaluate and improve your
+work.
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to:
+\begin{itemize}
+\item utilize the Cppcheck tool to evaluate source code
+\item recognize the benefits and limitations of Cppcheck
+\item maximize their testing efficiency by using a range of Cppcheck options
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+Cppcheck is a command line software tool used for static analysis,
+it is an open-source project that is available for download ( at\url{ https://sourceforge.net/p/Cppcheck/wiki/Home/}).
+Static analysis tools perform similar operations to your compiler,
+they evaluate your software code without running the code. A compiler
+identifies language syntax errors, such as not following the rules
+of the C-language, while static analysis tools like Cppcheck evaluate
+the code for style and logical errors. Cppcheck will identify many
+different types of errors in software code, some examples are out-of-bounds
+on arrays, memory leaks, uninitialized, or unused code. Cppcheck as
+a tool aims for 0 false positives, this means the tool errors on the
+side of caution, only returning feedback with a high degree of certainty
+of being an error. Cppcheck is a static analysis tool, this means
+it does not run your code and is not able to identify most run-time
+errors. 
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+Cppcheck is a command line tool that is installed on all university
+computer science machines. If installed, entering Cppcheck into the
+command line should display the Cppcheck manual page. The manual provides
+an overview of the Cppcheck arguments and options. The code for this
+review is available at (\#\#TODO: Link here\#\#). Here is an example
+main.c file used to demonstrate different properties of Cppcheck.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+/*  Purpose: This file purposely contains errors to be identified by Cppcheck.  
+	File: main.c 
+	University of Guelph, 2017.
+*/
+#include<stdio.h> 
+#include<stdlib.h>
+#include<string.h> 
+#include<time.h>
+
+/**This function does not and is not called.  
+ *@pre No pre conditions  
+ *@post No post conditions  
+ *@param a void pointer that does nothing.
+**/ 
+void doNotRunMe(const void* vp) { return; }
+
+int main(int argc, char ** argv) {   
+	 // The following code purposely contains errors    
+	// Ensure you can identify the same errors with gcc or Cppcheck.
+    int * leakyPtr = malloc(sizeof(int) );  
+	*leakyPtr = 5;
+    printf("The value is : %d ", leakyPtr);
+    printf("The value is : %d ", *leakyPtr);
+
+    char * chptr = NULL;
+    if( *leakyPtr == 5) {
+		chptr = malloc(sizeof(char));
+        chptr = 'b';
+	}
+    printf("ChPtr=%c", *chptr);
+    return 0;
+} 
+\end{lstlisting}
+
+When you run Cppcheck on this single file type, you should see feedback
+similar the following output:
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+> cppcheck main.c
+
+//Output
+Checking main.c... 
+[main.c:39]: (error) Memory leak: chptr 
+[main.c:46]: (error) Memory leak: leakyPtr
+\end{lstlisting}
+
+Running Cppcheck on main.c has identified two errors both memory leaks
+on the two pointers. The output is formatted as {[} filename:line
+number{]} (error type) Description : Additional information ( such
+as variable names ). Cppcheck is capable of identifying basic memory
+leaks, however, this is not the tools main function and tools such
+as Valgrind are much more reliable for identifying memory leaks. The
+output format can be modified or even changed to XML(via the \textendash xml
+flag) if desired but the standard output format should be sufficient.
+
+\subsection*{Flags\label{subsec:Variables}}
+
+This section discusses the most commonly used Cppcheck flags, these
+are all available for review in the Cppcheck manual. 
+
+\subsubsection*{Enable}
+
+The enable flag specifies which types of errors will be presented
+to the user, by default most errors are not enable, to quickly enable
+all errors type
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+cppcheck --enable=all main.c 
+
+//Output
+[main.c:31]: (warning) %d in format string (no. 1) requires
+			'int' but the argument type is 'int *'. 
+
+[main.c:42]: (warning) Possible null pointer dereference: chptr
+[main.c:38] ->
+[main.c:39]: (style) Variable 'chptr' is reassigned
+			a value before the old one has been used. 
+
+[main.c:39]: (error) Memory leak: chptr 
+[main.c:46]: (error) Memory leak: leakyPtr 
+[main.c:19]: (style) The function 'doNotRunMe' is never used. 
+
+(information) Cppcheck cannot find all the include files
+			(use --check-config for details)
+\end{lstlisting}
+
+When all Cppcheck errors are enabled the output includes many other
+types of warnings, suggestions, and recommendations. From the output,
+we observe two additional warnings, the first indicates that the print
+function on Line 31 is actually passing the pointer not the integer
+value, this is indicated as a warning because perhaps the developer
+wanted to print the pointer's address not the value. The second error
+on Line 42 indicates a potential error that could occur if leakyPtr
+was no longer set to 5 then the print statement on Line 42 could potentially
+be null and we would be dereferencing a null pointer, which would
+cause a crash. Cppcheck also identifies that on Line 19, we have a
+function that is never used, this is marked as a style error because
+perhaps this function is used elsewhere or will be used later. Finally,
+Cppcheck also provides information that not all included files can
+be found, this can occasionally occur when the standard libraries
+are includes but the path is not provided. If we run Cppcheck again
+with the suggested flag \textendash check-config, it will indicate
+the path is not set for proper standard library headers. This information
+can be ignored or omitted from the results using the suppress flag,
+ie ( Cppcheck \textendash suppress=missingIncludeSystem). The enable
+flag supports other more specific types of errors beyond all if you
+want to focus on a particular type of error you can use the following
+options warning, style, performance, portability, information, unusedFunction,
+or missingInclude. As an example (Cppcheck \textendash enable=information
+main.c), would display only information about the source code.
+
+\subsubsection*{Including Header files}
+
+To include your header files so that you don't receive information
+warnings about your non-included header files add the -I flag and
+your include directory.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+cppcheck --enable=all -I ./include/ main.c 
+
+//Output
+[main.c:31]: (warning) %d in format string (no. 1) requires 'int'
+			but the argument type is 'int *'. 
+
+[main.c:42]: (warning) Possible null pointer dereference: chptr 
+[main.c:38] ->
+[main.c:39]: (style) Variable 'chptr' is reassigned
+			a value before the old one has been used. 
+
+[main.c:39]: (error) Memory leak: chptr 
+[main.c:46]: (error) Memory leak: leakyPtr 
+[main.c:19]: (style) The function 'doNotRunMe' is never used. 
+\end{lstlisting}
+
+
+\subsubsection*{Errors and Suppressing}
+
+The suppress flag can be used to ignore errors warnings you don't
+wish to receive if you run Cppcheck with missingIncludeSystem and
+memleak suppressed you will receive the same output as before except
+without the memory leaks and include information. To find the tags
+name of errors you want to suppress use the flag: \textendash errorlist.
+Errorlist will display all errors Cppcheck searches for in XML format.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+cppcheck --enable=all --suppress=missingIncludeSystem --suppress=memleak main.c 
+
+//Output
+[main.c:31]: (warning) %d in format string (no. 1) requires 'int'
+			but the argument type is 'int *'.
+
+[main.c:42]: (warning) Possible null pointer dereference: chptr 
+[main.c:38] -> [main.c:39]: (style) Variable 'chptr' is reassigned
+			a value before the old one has been used.
+
+[main.c:19]: (style) The function 'doNotRunMe' is never used.
+\end{lstlisting}
+
+
+\subsubsection*{Language and Standards}
+
+Cppcheck can evaluate your source code based on different C and C++
+language settings or standards. Cppcheck will naturally access your
+code to identify a language but if you want to specify the language,
+use the language (\textendash language flag). C and C++ standards
+dictate the progression of the language, for instance, c99 indicates
+the C language standard as of 1999, as the language evolves new standards
+are set to support development needs. The difference between C/C++
+languages standard could be the implementation of new features such
+as the inclusion of strings, booleans or newer features. The Cppcheck
+defaults to the newest standard so if you want to use an older version,
+you will have to specify it with the standard flag. The example demonstrates
+both language and standard flags, set to C and C99 standard. Notice
+that the example also doesn't specify a specific file but now includes
+any files in the src directory. Depending on the portability of your
+code to older machines, setting the C/C++ language standard to an
+older version might not include any new errors or warnings.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+cppcheck --enable=all --language=c --std=c99 ./src/* 
+
+//Output
+[src/main.c:33]: (warning) %d in format string (no. 1) requires 'int'
+				but the argument type is 'int *'.
+
+[src/main.c:47]: (warning) Possible null pointer dereference: chptr 
+[src/main.c:40] ->
+[src/main.c:41]: (style) Variable 'chptr' is reassigned
+				a value before the old one has been used. 
+
+[src/main.c:41]: (error) Memory leak: chptr 
+[src/main.c:51]: (error) Memory leak: leakyPtr
+[src/main.c:21]: (style) The function 'doNotRunMe' is never used. 
+
+(information) Cppcheck cannot find all the include files
+			(use --check-config for details)
+\end{lstlisting}
+
+
+\subsubsection*{Inconclusive}
+
+Cppcheck as a tool aims for 0 false positives, this means that occasionally
+Cppcheck might be aware of potential errors but is not confident enough
+to display them as an error. The inconclusive flag allows observation
+of all potential warnings and errors even if Cppcheck is uncertain
+of the statement. The inconclusive flag can be useful for identifying
+other potential errors, but inconclusive errors should be evaluated
+with a higher level of scrutiny because they might not be errors at
+all. To include inconclusive errors use the \textendash inconclusive
+flag.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+cppcheck --enable=all --language=c --std=c99 --inconclusive -I ./include/ ./src/*
+
+//Output
+[src/main.c:33]: (warning) %d in format string (no. 1) requires 'int'
+				but the argument type is 'int *'.
+
+[src/main.c:47]: (warning) Possible null pointer dereference: chptr 
+[src/main.c:40] ->
+[src/main.c:41]: (style) Variable 'chptr' is reassigned
+				a value before the old one has been used. 
+
+[src/main.c:41]: (error) Memory leak: chptr 
+[src/main.c:51]: (error) Memory leak: leakyPtr
+[src/main.c:21]: (style) The function 'doNotRunMe' is never used. 
+
+(information) Cppcheck cannot find all the include files
+			(use --check-config for details)
+\end{lstlisting}
+
+Note the output remains the same with the use of the inconclusive
+flag, as most of the errors in the main.c are straight forward.
+
+\section*{Additional Information \label{sec:Additional-Information}}
+
+Cppcheck is a useful tool for identifying potential issues with your
+project for additional reference please see the following links:
+\begin{itemize}
+\item Main Website ( \url{http://cppcheck.sourceforge.net/} )
+\item Official Manual ( \url{http://Cppcheck.sourceforge.net/manual.pdf}
+)
+\item Useful Manual ( \url{http://www.cs.kent.edu/~rothstei/spring_12/secprognotes/Cppcheck_manual.pdf })
+\end{itemize}
+
+\end{document}

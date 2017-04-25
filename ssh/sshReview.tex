@@ -1,0 +1,116 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: SSH}
+\maketitle
+
+\section*{Overview}
+
+SSH ( Secure Shell ) is a program used to securely connecting to a
+remote server. SSH allows you connect to the university server and
+use the programming tools already established. This review covers
+a basic introduction to the topic, including a ``Getting Started''
+example, and some common best practice. For this review, it is suggested
+to read the additional support section before following any of the
+steps in the getting started, as the AnyConnect software can greatly
+ease connection to university servers for the first time.
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to:
+\begin{itemize}
+\item recognize the benefits of SSH 
+\item use SSH to connect to a remote server
+\item manage and test your software project remotely
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+SSH is terminal program that allows for secure encrypted connection
+between a host (your computer) and remote server. Occasionally, you
+may need to remote connect to the university server to test your code,
+if you are unable to be physically present at the university. SSH
+communicates over using the SSH protocol to the remote server. Once
+a secure connection has been established via SSH you will have complete
+access to your account, as if you were physically present. Within
+a Linux or Mac environment you can use the command SSH in the command
+line, if you're on windows the currently recommended application to
+connect is via PUTTY, instructions are available here (\url{https://www.uoguelph.ca/ccs/software/supported-products/putty})
+
+\subsection*{SSH Public or Private Keys}
+
+SSH authenticates users using either a password or an SSH key. SSH
+uses a set of public and private keys, the public key is shared to
+users of the system, while the private keys are protected and restricted.
+The remote system keeps a log of all authorized public keys that it
+has generated and in combination with the private key allows entry.
+To generate a key you can type : ssh-keygen -t rsa -C yourusername@linux.socs.uoguelph.ca 
+
+A key will be generated with the passphrase you provide and it will
+be stored in your home directory in the folder .ssh by default named
+id\_rsa.pub. The file id\_rsa.pub will contain the key you will need
+to pass to the linux.socs.uoguelph.ca when your first login.
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+If you type the SSH command into the terminal using: 
+\begin{lstlisting}[language=make,tabsize=4,frame=TB]
+ssh yourUserName@general.uoguelph.ca
+\end{lstlisting}
+
+SSH will request a password, if you don't setup an SSH key, you will
+have to enter that password every time you login. If you setup an
+SSH key, you will be automatically recognized and provided access.
+A useful tutorial on installing SSH keys is provided by the university
+at \url{https://www.uoguelph.ca/ccs/cwc/installing-ssh-keys}. From
+general.uoguelph.ca, you will need to log into linux.socs.uoguelph.ca
+to establish the connection between the authorization keys. In linux.socs.uoguelph.ca,
+change directories to .ssh and add a file called authorized\_keys
+and paste the generated key to the bottom of the file.
+
+The next time you login using the terminal or putty you should be
+able to directly login to ssh to linux.socs.uoguelph.ca
+
+\section*{Additional Support\label{sec:Examples} }
+
+Cisco AnyConnect VPN is software designed to improve the ease of connecting
+and managing remote access. It is highly recommended if you use Mac
+or Windows to use AnyConnect first before SSH into your linux.socs.uoguelph.ca.
+Instructions for installing and getting started with AnyConnect is
+available at \url{https://www.uoguelph.ca/ccs/anyconnect-vpn-user-guide}.
+Once connected to the AnyConnect VPN you will not need to connect
+to the general.uoguelph.ca server, you can connect directly to the
+linux.socs server.
+
+\section*{Additional Information \label{sec:Additional-Information}}
+\begin{itemize}
+\item \url{https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys}
+\item \url{https://www.uoguelph.ca/ccs/cwc/installing-ssh-keys}
+\item \url{https://www.uoguelph.ca/ccs/internet-phones/other-ways-get-connected/shell-access}
+\item \url{https://www.uoguelph.ca/ccs/cwc/sftp-tunneling-over-ssh-putty}
+\end{itemize}
+
+\end{document}
