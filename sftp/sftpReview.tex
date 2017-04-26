@@ -32,7 +32,7 @@
 SFTP stands for SSH or Secure File Transfer Protocol, it is used to
 securely transfer files between remote servers. It is useful for transfer
 files between your personal computer and the university development
-servers. We will review basic introduction to the topic, including
+servers. We will review a basic introduction to the topic, including
 a ``Getting Started'' example, and transferring files. 
 
 \section*{Learning Outcomes \label{sec:Learning-Outcomes}}
@@ -48,12 +48,12 @@ Upon successful completion of this review, you should be able to:
 
 FTP is a very common network protocol used throughout the Internet
 similar to protocols such as TCP/IP or HTTP. It is used to securely
-transfer files between a client and server. SFTP is is similar to
-SSH in that it provides a secure session for user interaction.Review
-material for SSH is available in the course documents which demonstrates
-securely connecting to another remote machine. FTP can be used through
-an SSH session but the SSH produce is also used to authenticate the
-SFTP protocol.
+transfer files between a client and server. SFTP is similar to SSH
+in that it provides a secure session for user interaction.Review material
+for SSH is available in the course documents which demonstrates securely
+connecting to another remote machine. FTP can be used through an SSH
+session but the SSH produce is also used to authenticate the SFTP
+protocol.
 
 Transferring files can occur using the SFTP command or putty using
 the command line or more commonly through an application interface
@@ -61,7 +61,7 @@ such as FileZilla, WinSCP, or FireFTP.
 
 \section*{Getting Started \label{sec:Getting-Started}}
 
-SFTP is a command run from the terminal 
+SFTP is a command you can run from the terminal: 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
 sftp yourUserName@general.uoguelph.ca
 \end{lstlisting}
@@ -83,7 +83,7 @@ put yourUserName@general.uoguelph.ca
 Filezilla is an application that manages the SFTP connection and provides
 an easy to use GUI for transferring files between client and the survey.
 To get started download the FileZilla client application. In the Filezilla
-network options you will need to provide the same network information
+network options, you will need to provide the same network information
 used to connect to the linux.socs.uoguelph.ca site, this includes
 your username, the server (linux.socs.uoguelph.ca), and your password.
 A small tutorial for the Filezilla user interface is available at

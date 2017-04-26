@@ -1,0 +1,155 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{babel}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage[unicode=true]
+ {hyperref}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\makeatother
+
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: Testing}
+\maketitle
+
+\section*{Overview}
+
+Software development requires constant debugging and testing code
+to ensure quality and functionality of the software. Proper testing
+includes multiple forms of testing, the most common is unit testing.
+This review will introduce the benefits of unit testing, and the concepts
+of code coverage and edge-case testing. This review includes a practical
+example of developing an integer array container, and how to properly
+test your code to ensure it's functionality.
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to: 
+\begin{itemize}
+\item comprehend the concepts of unit testing, code coverage, and edge testing
+\item identify components of software code that require testing
+\item apply proper testing patterns to ensure code quality.
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+One of the most time-consuming aspects of software development is
+manually testing or walking through test-cases of your code to ensure
+correctness. As software projects and team sizes grow it increases
+the potential for bugs to be accidentally introduced. By creating
+small automated tests known as unit tests, you can ensure that fewer
+bugs will be accidentally introduced, that your code is functioning
+as expected, and can assure other developers you've created quality
+software.
+
+Unit testing focuses on testing the smallest functional unit of code,
+this doesn't mean testing every line or every section of code but
+focuses testing on specific sections of grouped functionality. Deciding
+what requires unit testing is a significant part of ensuring quality,
+usefulness, and an appropriate cost to benefit ratio. If you are developing
+an abstract data type, such as a stack or list, generally you will
+have a unit test for each operation such as create, insert, remove,
+destroy and others. Unit testing should be separated from the main
+program and executable via the makefile. The benefit of unit testing
+is that it is automated, you write test code once and as the code
+evolves if the new changes break the tests you will be notified. 
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+The example code provided at \href{file:./testingExample}{testingExample}
+demonstrates the basics of creating your own unit testing. Many libraries
+currently exist to help provide unit testing, some popular libraries
+are CUnit and CppUnit. In our example, three functions have been created
+to display the results of unit tests in the test.h and test.c. This
+demonstrates the simplicity of unit testing statements.
+
+In the testingExample, we have created two mains main.c and testMain.c
+the first contains the functionality for running the programming as
+normal. The second main file, testMain.c, contains functionality for
+all the unit tests and summary of results. The concept of code-coverage
+means that code you developed is covered by a unit testing or other
+testing method. Full code-coverage indicates that you have unit-testing
+for all or 90+\% of your code. Code coverage is measured in percentage
+and the amount of code coverage depends on the application. If your
+application is system-critical code coverage will consistent of a
+high 95-99\%, less critical system will have lower code coverages.
+
+Lets begin with writing a test, no matter what type of test you're
+performing, your test should include the following information. This
+example is from testMain.c:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+Array * arr = createArray(-1);
+printTestIntroInfo(testNumber++, "Testing invalid array size");
+printf("Expected:%d\n", NULL);
+printf("Received:%d\n", arr->arr == NULL);
+testsPassed += printPassFail( arr->arr == NULL );
+destroyArray(&arr);
+\end{lstlisting}
+
+This section of code, creates an Array structure with the size of
+-1, this is an invalid size for the array, so our test evaluates how
+the Array structure performs with invalid data sizes. After creating
+the array, the first print statement indicates to the user what is
+being tested. The next line prints what the expected result of the
+test, followed by the actual results. On line 5, we continue summing
+the number of tests that have passed and printed the result of the
+test. Note, that the result of the test is a boolean result, we check
+for equality between the expected result (NULL) and the actual result
+found in arr-\textgreater{}arr. Finally, we clean up any memory used
+for the test and that concludes a single unit test.
+
+This is a single unit test for the creation of an Array, you will
+likely need to include multiple tests to ensure higher quality and
+coverage. For the array creation function, you should also test a
+regular case, ie an array created with a valid size. Creating an array
+with a size of -1 or 0 are considered edge cases, with size -1 the
+input data is invalid, with a size of 0, it is valid however not useful.
+Edge cases consider where your program is likely to break, based on
+assumptions in your code or incorrect input. As an example the array
+is created with a static size, we should test if what happens when
+someone the array structure tries to access outside of that static
+size.
+
+The testMain.c includes a number of examples of unit tests, remember
+that nearly every function of your abstract data type or container
+should contain at least one unit test, this include creating and destroying
+structures. When creating software it is occasional useful to consider
+how you would test your code before actually writing, this is known
+a test-driven development (TDD). In test-driven development, the developer
+designs and implements the test before writing the code. The benefit
+of this approach is minimizing the amount of code created and ensuring
+each step is correct before progressing although it can be more time-
+consuming.
+
+\section*{Additional Information \label{sec:Additional-Information}}
+
+The following links provide valuable additional introductory documentation
+and examples. 
+\begin{itemize}
+\item \url{http://cunit.sourceforge.net/} 
+\item \url{https://en.wikipedia.org/wiki/CppUnit} 
+\item \url{http://agiledata.org/essays/tdd.html} 
+\item \url{http://softwaretestingfundamentals.com/unit-testing/}
+\end{itemize}
+
+\end{document}
