@@ -1,0 +1,192 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: GDB}
+\maketitle
+
+\section*{Overview}
+
+GDB is the GNU debugger, it is a debugger for several languages including
+C and C++. Understanding how to use different debugging tools can
+greatly reduce the amount of time you spend fixing or code. We will
+review an introduction to GDB, including a ``Getting Started'' example,
+and some common best practice.
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to:
+\begin{itemize}
+\item recognize the benefits of the GNU Debugger
+\item comprehend the different GDB options
+\item apply GDB options to inspects and evaluate your code
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+A debugger is a computer program that aids in evaluating and testing
+your source code. Debuggers allow you to step through your program
+line by line, this helps observe the state of your code and identify
+bugs. A debugger provide a layer of protection for your system when
+running software. The potential for errors in your software code to
+modify or damage a system are possible, although very unlikely, a
+debugger helps protect your system.
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+Debugging your code to ensure it is working properly can be a frustration
+and time-consuming task. Developing practical experience using a debugger
+and other evaluation tools can improve your ability to quickly find
+errors and ensure a higher level of quality code. Please see the review
+material on unit testing for developing small automated tests.
+
+A debugger will help you find instances where your program has crashed,
+one of the most common cases are segmentation faults in which the
+software has tried to use too much memory or access unavailable system
+memory.
+
+GBD is integrated with GCC if you would like an additional resource
+on GCC please see the review materials. By adding the -g command line
+parameter to GCC compiler call you enable debugging support. For instance
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+gcc -Wall -g main.c -o myProgram
+\end{lstlisting}
+
+By adding debugging support to your program you can know use GDB.
+Debugging support adds additional information to your program to help
+trace the steps, this includes leaving some information in a human
+readable form.
+
+GDB has a user interface that you can explore by simply type gdb in
+the command line. Once in gdb interface, you can type help to explore
+other options. To begin using GDB with your program simply use the
+following command.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+gdb myProgram
+\end{lstlisting}
+
+This begins a GDB session with myProgram, if you type run, your program
+will be run in the safety of the GDB session.
+
+\section*{Examples \label{sec:Examples} }
+
+Let's examine a more practical example, here is an example of running
+a small program with gdb run, here is the main of this example:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+int * p = NULL;
+printf("This main is about to segfault\n");
+printf("%d",*p); 
+\end{lstlisting}
+
+These three lines of code create a segmentation fault. The code contains
+a pointer that is set to NULL and when accessed in the printf statement
+it tries to convert the value to a decimal. If you run the example
+in GDB, the output will be:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+Starting program: mainTest  
+This main is about to segfault
+Program received signal SIGSEGV, Segmentation fault. 
+0x000000000040058b in main (argc=1, argv=0x7fffffffdd98) at main.c:27 
+27 printf("%d",*p); 
+\end{lstlisting}
+
+The output first demonstrates that mainTest was run, followed by our
+warning statement that we expected the program to segfault. The 3rd
+line of the output is the GDB output indicating that the program has
+segfaulted. The fourth line of output is a hexadecimal number of the
+system memory address of your the program, followed by the file (main.c)
+and the line number 27. The last line of the output indicates the
+line of code the segmentation fault occurred on. It's important to
+note that the line a code that crashes is not necessarily the cause
+of the crash, the crash is often caused by a logical error earlier
+in the program. For instance, in our code, the printf(``\%d'', {*}p)
+is valid code that only produces a segmentation fault if the pointer
+is invalidate or NULL. The logical error in this code is not providing
+an integer value for the pointer p, either in the first step or before
+the print statement. Alternatively, this error could be avoided by
+prechecking that {*}p does not equal NULL before printing.
+
+By typing run without using any other features of the debugger the
+program runs until a crash, completion, or user input is required.
+In our instance, the debugger indicates that an error occurs at line
+27 if we wanted to halt the program before the error to view the state
+of the program we can add a breakpoint. A breakpoint is exactly what
+is sounds like, a stopping point in which your program will pause
+execution. To create a breakpoint in the main.c file at line 20 in
+GDB interface type:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+break main.c:20
+\end{lstlisting}
+
+You can add as many breakpoints as needed. Now in GDB when you type
+run, your program will run up to line 20 then stop until further instruction
+with the following output:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+Breakpoint 1, main (argc=1, argv=0x7fffffffdd98) at main.c:24 
+24		printf("%d",*p); 
+\end{lstlisting}
+
+Line 20 is comment thus GDB breaks at the next instruction which occurs
+on line 24. Once stopped at a breakpoint you can view the value of
+the p variable by typing:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// Print the value of p
+print {p}
+
+// Print the type and value of p
+print p
+\end{lstlisting}
+
+Once you've reached a breakpoint, you might want to navigate slowly
+to the next line of code to inspect the state of your program in greater
+detail.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// type next to execute the next line of code
+next
+
+// step is similar to next except that it will enter into a function.
+step
+
+// type continue to keep running the program past a breakpoint
+continue;
+\end{lstlisting}
+
+
+\section*{Additional Information \label{sec:Additional-Information}}
+\begin{itemize}
+\item \url{https://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf}
+\item \url{http://www.thegeekstuff.com/2010/03/debug-c-program-using-gdb/}
+\item \url{http://web.eecs.umich.edu/~sugih/pointers/gdbQS.html}
+\end{itemize}
+
+\end{document}
