@@ -1,18 +1,24 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
 \documentclass[12pt,english]{article}
 \renewcommand{\familydefault}{\sfdefault}
+\usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
 \usepackage{url}
 \usepackage{amsmath}
-\usepackage{amsthm}
 
 \makeatletter
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
-\numberwithin{equation}{section}
-\numberwithin{figure}{section}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \date{ }
+
+
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+
 
 \makeatother
 
@@ -22,35 +28,223 @@
 
 \begin{document}
 
-\title{Review: }
+\title{Review: Binary Files}
 \maketitle
 
 \section*{Overview}
 
-
+A binary file is a file that is stored in non-text format, instead
+of readable characters. Creating and storing binary files are a fundamental
+component of computer programing that must be integrated into the
+development of your labs and assignments throughout the course. We
+will discuss the reasoning and benefits to the topic, including a
+``Getting Started'' example, and additional resources.
 
 \section*{Learning Outcomes \label{sec:Learning-Outcomes}}
 
-Upon successful completion of this review, you should be able to:
+Upon successful completion of this review, you should be able to: 
 \begin{itemize}
-\item 
+\item recognize the benefits of binary files
+\item create a binary file from a programming example 
+\item execute a binary 
 \end{itemize}
 
 \section*{Introduction \label{sec:Introduction}}
 
+A binary file is an non-text file, this means that the content written
+within the file is not text characters. Examples of binary files include
+but are not limited to image files, compressed files, and computer
+programs. For instance an image files often contains brief XML data
+about how the image is store followed by a large matrix of numerical
+data representing the colors or pixels of an image. Many types of
+binary files can be opened with a regular text editor, however the
+result is often a file filled with unreadable content. 
 
+Binary files provide an more efficient method of storing data files
+in comparison to text files. If you consider the zipping a regular
+text file, the zipped file is a binary file. The zipped file is smaller
+size, which requires less memory to store on the system and faster
+network transfer speeds.
+
+Software code is stored in a text file, when we compile the software
+code with GCC or other compilers, the code is convert to a machine
+readable binary format. In computer science, we usually refer to the
+binary/hexadecimal formatted file created by the compiler as the program
+or executable.
+
+Any computer program needs to be converted to a machine readable format
+before execution. This allows the computer to interpret the instructions
+in a language it understands. Compiled computer programs are often
+stored in a binary file in hexadecimal, also know as hex, which is
+a set of hexadecimal numbers representing the original instructions. 
 
 \section*{Getting Started \label{sec:Getting-Started}}
 
+Most binary files types have a specific program that opens or executes
+the file type. For instance most operating systems contains an image
+viewer program that opens the most common types of images. Since computer
+programs are compiled into a hex format, you will need to use a hex
+viewer to interpret the contents of the executable. Viewing hexadecimal
+of your program or the output is often not overkill since most debuggers
+help translate the errors back into a human readable format.
 
+To generate a binary file of a computer program, we simply need to
+compile it.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+gcc yourFile.c -o myProgram
+\end{lstlisting}
+
+The executable myProgram will be a binary file, the contents of which
+will be hexadecimal values. As previously specified most binary files
+need a specific program to open, however compiled programs can simply
+be executed from the command line by calling:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+./myProgram
+\end{lstlisting}
+
+
+\section*{Examples \label{sec:Examples}}
+
+As previously mentioned, storing files in binary format reduces the
+storage requirements of the system and also improves speed of access.
+When reading and writing binary files, there is the added advantage
+that you can instantly read from any location in the file, more specifically
+you can seek a position to start reading without reading the previous
+sections, this can not be accomplished with text files.
+
+The following example, binaryExample.c demonstrates the key functions
+involved in creating and reading binary files. The following code
+is the full program, but we will look at each binary related step
+individually. This program attempts to read a binary file with 5 2D
+points. If the file does not exist it generates a file with expected
+data. Note that data is stored in a binary file, if you open testFile.bin
+(bin for binary) in a text editor it will be unreadable.
+
+\begin{lstlisting}[language=C,showstringspaces=false,tabsize=4,frame=TB]
+#include<stdio.h>
+
+typedef struct {
+        int x,y;
+} Point2D;
+
+int main( int argc, char ** argv ) {
+
+        FILE * file = NULL;
+        Point2D pt;
+
+        file = fopen("testFile.bin", "rb");
+
+        if( !file ) {
+
+                // If the testFile bin does not already exist populate it wth some data.
+
+                file  = fopen("testFile.bin", "wb");
+
+                // Return can't read or write
+                if(!file){
+                        printf("Unable to read or write file.");
+                        return 1;
+                }
+
+                for( int i = 0; i < 5; i++ ) {
+                        pt.x = i;
+                        pt.y = i * 3;
+
+                        fwrite(&pt,sizeof(Point2D), 1, file);
+                }
+
+                printf("Testfile.bin has been written, it's a binary file.\n");
+				printf("Open it with a text editor to see it's not readable\n");
+                printf("rerun this program, to view the data was created in binary.\n");
+        }
+        else {
+                // Read all of the examples and print
+                for( int i = 0; i < 5; i++ )
+                {
+                        fread(&pt, sizeof(Point2D), 1, file );
+                        printf("Data was read: %d %d\n", pt.x, pt.y );
+                }
+
+                printf("**********************Seek File position\n");
+
+            // Print a specific example, seek a specific position in the file
+                // The read from that position
+                fseek(file,sizeof(Point2D)*2, SEEK_SET);
+                fread(&pt, sizeof(Point2D), 1, file );
+                printf("Data was read: %d %d\n", pt.x, pt.y );
+
+                printf("**********************Rewind File\n");
+
+
+                // Print the first value again, because we've rewound the file.
+                rewind(file);
+                fread(&pt, sizeof(Point2D), 1, file );
+                printf("Data was read: %d %d\n", pt.x, pt.y );
+        }
+        fclose(file);
+        return 0;
+}
+\end{lstlisting}
+
+The first thing to note about this program is how to open and read
+binary files, the process is nearly identical to opening a normal
+test file.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// Add a b to open a binary file for reading
+file = fopen("testFile.bin", "rb");
+
+// Add a b to open a binary file for writing
+file = fopen("testFile.bin", "wb");
+\end{lstlisting}
+After a binary file is open the reading and writing actions are:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// Read a Point2D, the size of struct, number to read from which file.
+fread(&pt, sizeof(Point2D), 1, file );
+
+// Writing in nearly identical
+fwrite(&pt,sizeof(Point2D), 1, file);
+\end{lstlisting}
+
+Finally, one of the main benefits of a binary file is that you can
+easily control your reading and writing position in the file.
+
+For instance, if you want read a specific example, you simply need
+to set the position to start reading from using seek() then read from
+that position. The binary data in this file is stored in array of
+binary data, so to find a specific position in the file, your program
+must indicate the size of the items in the array and the index of
+the item in the array. The fseek function takes the file, the position
+to start and ENUM indicating the method to apply, in this case we
+are setting the position.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// Print a specific example, seek a specific position in the file
+// The read from that position
+fseek(file,sizeof(Point2D)*2, SEEK_SET);
+fread(&pt, sizeof(Point2D), 1, file );
+printf("Data was read: %d %d\n", pt.x, pt.y );
+
+printf("**********************Rewind File\n");
+
+// Print the first value again, because we've rewound the file.
+rewind(file);
+fread(&pt, sizeof(Point2D), 1, file );
+printf("Data was read: %d %d\n", pt.x, pt.y );
+\end{lstlisting}
+
+The rewind function can be used to reset to positional information
+of the file, we could easily have used fseek(file,0, SEEK\_SET) too.
+Other helpful functions exist for navigation the position of the file
+reader, please see additional information for links.
 
 \section*{Additional Information \label{sec:Additional-Information}}
-
-
 \begin{itemize}
-\item Main Website 
-\item Official Manual 
-\item
+\item \url{https://www.codingunit.com/c-tutorial-binary-file-io} 
+\item \url{http://www.cprogramming.com/tutorial/cfileio.html}
 \end{itemize}
 
 \end{document}
