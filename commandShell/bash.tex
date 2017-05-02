@@ -238,14 +238,14 @@ of each directory.
 int main( int argc, char ** argv )
 {
     for( int i = 1; i < argc; i++) {
-            char path[256];
-			// This function combines argument with the list command.
-			// ex) ls someDirectory			
-            snprintf(path, sizeof path, "%s%s", "ls  ", argv[i]);
+        char path[256];
+		// This function combines argument with the list command.
+		// ex) ls someDirectory			
+        snprintf(path, sizeof path, "%s%s", "ls  ", argv[i]);
 
-			// This function calls the operating system with the string
-			// provided in this case a list function
-            system(path);
+		// This function calls the operating system with the string
+		// provided in this case a list function
+        system(path);
     }
 }
 \end{lstlisting}
@@ -254,7 +254,8 @@ int main( int argc, char ** argv )
 \section*{Additional Information \label{sec:Additional-Information}}
 \begin{itemize}
 \item \url{http://linuxcommand.org/index.php} 
-\item \url{http://www.cprogramming.com/tutorial/cfileio.html} 
+\item \url{https://www.gnu.org/software/bash/} 
+\item \url{http://www.informit.com/blogs/blog.aspx?uk=The-10-Most-Important-Linux-Commands}
 \end{itemize}
 
 \end{document}
