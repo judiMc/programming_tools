@@ -1,18 +1,30 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
 \documentclass[12pt,english]{article}
 \renewcommand{\familydefault}{\sfdefault}
+\usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
 \usepackage{url}
 \usepackage{amsmath}
-\usepackage{amsthm}
 
 \makeatletter
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
-\numberwithin{equation}{section}
-\numberwithin{figure}{section}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \date{ }
+
+
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+
+
+
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
 
 \makeatother
 
@@ -22,35 +34,227 @@
 
 \begin{document}
 
-\title{Review: }
+\title{Review: Command Shell}
 \maketitle
 
 \section*{Overview}
 
-
+The command shell, command line, or shell is an user interface which
+interacts directly with the operating system. Mastering fundamentals
+of the command shell will be integral in developing your labs and
+assignments throughout the course. We will discuss the most common
+commands, identify the most common types of command shells, discuss
+how to call system commands in a ``Getting Started'' example, and
+additional resources.
 
 \section*{Learning Outcomes \label{sec:Learning-Outcomes}}
 
-Upon successful completion of this review, you should be able to:
+Upon successful completion of this review, you should be able to: 
 \begin{itemize}
-\item 
+\item comprehend the difference between CLI and GUI
+\item be aware of alternative types of command shell
+\item identify the 10 most common commands in bash
+\item call shell commands from your C program
 \end{itemize}
 
 \section*{Introduction \label{sec:Introduction}}
 
+The command shell is the original user interface for most operating
+systems, it allows users to type commands to start programs. While,
+many of us have grown accustom to graphical user interface the command-line
+interface (CLI) is still a very powerful method of interacting with
+the operating system. The command shell is a program that takes user
+input, finds then runs the appropriate program with the arguments
+provided. On most Linux operating systems, the default shell is bash.
+If you a start a terminal in Linux, you'll be using bash. Different
+shells have a number of different preferences and commands. Examples
+of different shells are zsh, ksh, and tcsh. In addition, there are
+multiple terminal applications that can improve usability such xterm,
+terminator, and terminal.
 
+As bash is the default command shell, that is where we will focus
+our attention. The importance of working from the shell is understanding
+how the filesystem is setup. In our GUI, files and folders have a
+visual representation that mimicks the underinglying filesystem. Instead
+of clicking on folder to enter the folder, you must use the command
+(cd) to change directories.
 
 \section*{Getting Started \label{sec:Getting-Started}}
 
+The bash command line provides a powerful method of running software,
+one of the key advantages is being able to generate scripts that automate
+common commands process. Another advantage of command line software
+is being able to quickly share data between programs via a process
+called 'piping'.
+
+\subsubsection*{Getting Help}
+
+Most bash commands will provide a helpful description of the program,
+the list of possible arguments, and examples. If a bash command or
+program has additional information it will usually be available via
+one of these standard methods.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// provide manual for ls command
+man ls
+
+// -h command line argument for help
+someCommand -h
+\end{lstlisting}
+
+
+\subsubsection*{Navigation}
+
+Navigation has several shortcuts to refer to specific locations. A
+'.' refers to the current directory, while '..' refers to the parent
+directory. The '\textasciitilde{}' symbol refers to your home directory.
+The '/' symbol refers to the root directory of the computer. To begin
+navigating your bash shell several commands are useful
+
+\subsubsection*{List}
+
+To list the contents of a directory, call the command 'ls' followed
+by a path to a directory
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// To list what is the current directory
+ls
+
+// List some sub-directory
+ls subDirectory/AnotherDir/
+
+// List all hidden files and information
+ls -al
+\end{lstlisting}
+
+
+\subsubsection*{Change Directory}
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// Change directory from your current location
+cd subDirectory/anotherSubDirectory
+or
+cd ./subDirectory/anotherSubDirectory
+
+// Change directory from your home directory.
+cd ~/someDirectory/
+
+// Change directory from root directory
+cd /var/user/yourUserName
+\end{lstlisting}
+
+
+\subsubsection*{Print Working Directory}
+
+If you would like to view your current directory use the 'pwd' command
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+pwd
+\end{lstlisting}
+
+
+\subsubsection*{Clear screen}
+
+ITo clear the screen of any output use the 'clear' command
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+clear
+\end{lstlisting}
+
+
+\subsubsection*{History}
+
+To view the history of commands called from your command shell use
+the 'history' command.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+history
+\end{lstlisting}
+
+
+\subsubsection*{Previewing Files}
+
+To view the contents of a file there are several functions which are
+helpful. Alternative, text-editors such as vim or emacs exist if you
+which to edit the contents. To view just the begin of a file use the
+'head' command 
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// View top contents of a file
+head someFile.txt
+
+// To view the first 20 lines of a use the 'n' argument.
+head -n 20 someFile.txt
+\end{lstlisting}
+
+The tail command allows you to view the last section of content in
+a file, this is useful for reading errors or the most recent output
+from a program.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// View top contents of a file
+tail someFile.txt
+
+// To view the first 20 lines of a use the 'n' argument.
+tail-n 20 someFile.txt
+\end{lstlisting}
+
+Finally, if you which to view the full file contents in manegable
+sections the 'more' command breaks the file into sections to be viewed,
+it waits for user input before continuing.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// View the full contents of a file in sections
+more someFile.txt
+\end{lstlisting}
+
+
+\subsection*{Multiple Programs}
+
+As mentioned, the command shell allows you to combine several commands
+together via the pipe operator '\textbar{}'. For instance, when using
+the history command there is often significant output that scrolls
+down the screen. Using the pipe command, we can view the contents
+of history command in a more manageable format.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// View the contents of history in sections.
+history | more
+\end{lstlisting}
+
+
+\section*{Examples \label{sec:Examples}}
+
+Command shells commands can be called directory from your C program,
+consider the program provided in commandShell.c. This program takes
+multiple arguments that are paths to directorys and lists the contents
+of each directory.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int main( int argc, char ** argv )
+{
+    for( int i = 1; i < argc; i++) {
+            char path[256];
+			// This function combines argument with the list command.
+			// ex) ls someDirectory			
+            snprintf(path, sizeof path, "%s%s", "ls  ", argv[i]);
+
+			// This function calls the operating system with the string
+			// provided in this case a list function
+            system(path);
+    }
+}
+\end{lstlisting}
 
 
 \section*{Additional Information \label{sec:Additional-Information}}
-
-
 \begin{itemize}
-\item Main Website 
-\item Official Manual 
-\item
+\item \url{http://linuxcommand.org/index.php} 
+\item \url{http://www.cprogramming.com/tutorial/cfileio.html} 
 \end{itemize}
 
 \end{document}
