@@ -38,7 +38,7 @@
 
 Tar and GZIP are two programs used to create and extract compressed
 archives of files. This process is also known as zipping or compressing
-files, is the process of grouping and compress the size of a set of
+files, and is the process of grouping and compressing the size of a set of
 files. In order to submit your labs and assignments throughout the
 course, you will need to submit compressed archived files. This review
 introduces the basic usage concepts of Tar and GZIP tools, including
@@ -49,16 +49,16 @@ a ``Getting Started'' example, and some useful common-line arguments.
 Upon successful completion of this review, you should be able to:
 \begin{itemize}
 \item recognize the benefits of using an archiving program
-\item archive and underachieve your projects for submission
+\item archive and unarchive your projects for submission
 \item apply command-line arguments to modify archives
 \end{itemize}
 
 \section*{Introduction \label{sec:Introduction}}
 
-GZIP(GNU Zip) and Tar (Tape Archiver) are two programs \it{often} used in
+GZIP (GNU Zip) and Tar (Tape Archiver) are two programs \textit{often} used in
 combination to create a compressed archive or also known as zip file.
-Compressed archives are a simple method of keeping all your information together
-and reducing the file size. Compressing your files minimizes the space
+Compressed archives are a simple method of keeping all your information
+together and reducing the file size. Compressing your files minimizes the space
 the files use on the system and the time to transfer the files. The
 first part of creating a compressed archive is to organize all of
 the desired files into a single archive or tar file, this uses the
@@ -78,7 +78,7 @@ To get started, let's create a tar archive from a programming project,
 with the following command line call:
 
 \begin{lstlisting}[language=make,tabsize=4,frame=TB]
-tar cvf myProject.tar ./myProjectDirectory 
+tar cvf myProject.tar ./myProjectDirectory
 \end{lstlisting}
 
 The command-line arguments perform the following actions:
@@ -107,27 +107,27 @@ gzip -l myProject.tar.gz
 gzip -d myProject.tar.gz
 \end{lstlisting}
 
-Extract a tar.gz file using gzip will give you the original tar archive,
+Extracting a tar.gz file using gzip will give you the original tar archive,
 however, you'll probably want to extract the original contents from
 within the tar file. To remove the contents from a tar or tar.gz file
-use the 'x' command-line parameter 
+use the 'x' command-line parameter
 
 \begin{lstlisting}[language=make,tabsize=4,frame=TB]
-// Extract file contents from compression file
+# Extract file contents from compression file
 tar xvf myProject.tar.gz
 
-// Extract file from tar
+# Extract file from tar
 tar xvf myProject.tar
 \end{lstlisting}
 
 On most machines, you can extract the files from the compressed archive
-all in one go by running
+all in one go by running the following command
 \begin{lstlisting}[language=make,tabsize=4,frame=TB]
 tar xvzf myProject.tar.gz
 \end{lstlisting}
 
 
-\subsection*{Variables \label{subsec:Variables}}
+\subsection*{Arguments \label{subsec:Arguments}}
 
 Tar contains several useful command-line arguments, this list contains
 some of the more common command-line arguments:
