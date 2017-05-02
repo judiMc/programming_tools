@@ -55,9 +55,9 @@ Upon successful completion of this review, you should be able to:
 
 \section*{Introduction \label{sec:Introduction}}
 
-GZIP(GNU Zip) and Tar ( Tape Achiever) are two programs used in combination
-to create a compressed archive or also known as zip file. Compressed
-archives are a simple method of keeping all your information together
+GZIP(GNU Zip) and Tar (Tape Archiver) are two programs \it{often} used in
+combination to create a compressed archive or also known as zip file.
+Compressed archives are a simple method of keeping all your information together
 and reducing the file size. Compressing your files minimizes the space
 the files use on the system and the time to transfer the files. The
 first part of creating a compressed archive is to organize all of
@@ -67,14 +67,14 @@ all the files within the tar file using gzip or an equivalent program.
 Tar archives should use the extension .tar, while GZIP compressed
 files will have the extension .gz. If Tar and GZIP have been used
 in combination, the compressed archive will often have both extensions
-in the form ``.tar.gz''. Tar and GZIP are so frequently used together,
-that it is easy to forget that are different programs, especially
+in the form ``.tar.gz'', or ``.tgz". Tar and GZIP are so frequently used
+together, that it is easy to forget that are different programs, especially
 as many of the command-line arguments provide by tar support functionality
 available in GZIP.
 
 \section*{Getting Started \label{sec:Getting-Started}}
 
-To get start lets create a tar archive from a programming project,
+To get started, let's create a tar archive from a programming project,
 with the following command line call:
 
 \begin{lstlisting}[language=make,tabsize=4,frame=TB]
@@ -83,9 +83,10 @@ tar cvf myProject.tar ./myProjectDirectory
 
 The command-line arguments perform the following actions:
 \begin{lyxlist}{00.00.0000}
-\item [{c}] create a new .tar archive named myProject.tar
+\item [{c}] create a new .tar archive
 \item [{v}] the verbose flag provides additional output from the program
-\item [{f}] indicates the tar filename was provided
+\item [{f}] indicates the tar archive should be named by the following
+            string, in this case ``myProject.tar"
 \end{lyxlist}
 This call will create a tar file named myProject.tar, when the program
 runs it will output all files and paths that have been included in
@@ -96,13 +97,13 @@ compressed. If you want to list or extract the contents of a compressed
 gz file, you can use the following commands.
 
 \begin{lstlisting}[language=make,tabsize=4,frame=TB]
-// Create a compressed tar
+# Create a compressed tar
 tar cvfz myProject.tar.gz ./myProjectDirectory
 
-// List files in compressed tar
+# List files in compressed tar
 gzip -l myProject.tar.gz
 
-//Extract tar file from compressed file
+# Extract tar file from compressed file
 gzip -d myProject.tar.gz
 \end{lstlisting}
 
@@ -119,6 +120,12 @@ tar xvf myProject.tar.gz
 tar xvf myProject.tar
 \end{lstlisting}
 
+On most machines, you can extract the files from the compressed archive
+all in one go by running
+\begin{lstlisting}[language=make,tabsize=4,frame=TB]
+tar xvzf myProject.tar.gz
+\end{lstlisting}
+
 
 \subsection*{Variables \label{subsec:Variables}}
 
@@ -129,10 +136,10 @@ some of the more common command-line arguments:
 \item [{-r}] append files to archive
 \item [{-t}] list the contents of tar
 \item [{-u}] update only archive that are new or changed files
-\item [{-x}] extract files from tar or gz
-\item [{-f}] give filename of tar or zip
+\item [{-x}] extract files from an archive
+\item [{-f}] give filename to tar or zip (last argument before filename)
 \item [{-c}] create an archive
-\item [{-z}] compress the tar files
+\item [{-z}] compress the tar files using gzip
 \item [{-v}] verbose
 \item [{\textendash delete}] delete files form archives
 \end{lyxlist}
