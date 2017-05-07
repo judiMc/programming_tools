@@ -1,18 +1,36 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
 \documentclass[12pt,english]{article}
 \renewcommand{\familydefault}{\sfdefault}
+\usepackage[latin9]{inputenc}
 \usepackage{geometry}
 \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
 \usepackage{url}
 \usepackage{amsmath}
-\usepackage{amsthm}
 
 \makeatletter
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
-\numberwithin{equation}{section}
-\numberwithin{figure}{section}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \date{ }
+
+
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+
+
+
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
 
 \makeatother
 
@@ -22,35 +40,154 @@
 
 \begin{document}
 
-\title{Review: }
+\title{Review: C Libraries}
 \maketitle
 
 \section*{Overview}
 
-
+The command shell, command line, or shell is an user interface which
+interacts directly with the operating system. Mastering fundamentals
+of the command shell will be integral in developing your labs and
+assignments throughout the course. We will discuss the most common
+commands, identify the most common types of command shells, discuss
+how to call system commands in a ``Getting Started'' example, and
+additional resources.
 
 \section*{Learning Outcomes \label{sec:Learning-Outcomes}}
 
-Upon successful completion of this review, you should be able to:
+Upon successful completion of this review, you should be able to: 
 \begin{itemize}
-\item 
+\item comprehend how to include a C-Library
+\item include C-Libraries in your make files
+\item differentiate between library types
+\item develop and use your own static C-Library
 \end{itemize}
 
 \section*{Introduction \label{sec:Introduction}}
 
+Software code libraries provide a convenient method for programmers
+and projects to share common functionality. The C programming language
+contains many libraries that can be included. By default, when you
+use gcc the library libc.a is automatically included. Typically, libraries
+files are prefixed with 'pre'. Two types of libraries exist, statically
+linked ( .{*}a ) and dynamic linked ( {*}.so ), thus libc.a is a statically
+linked library for the c language. On a Linux system, standard libraries
+are typically stored in '/lib' or '/usr/lib'. Statically linked libraries
+or static libaries are organized sets of software code that can be
+called external once compiled. When a program or executables compiles
+and links using a static library, a copy of the static libary is copied
+and included in the executable. If the code in the static library
+needs to change, the entire executable must be recompiled. This means
+the executable is a complete unit by itself without external resources,
+but is quite large in size.
 
+Dynamically linked libraries (DLL) or dynamically linked shared object
+libraries (.so) are libraries that are linked at runtime. Dynamically
+linked libraries have the advantage of being able to change the library
+or the main program without recompiling or linking the other parts
+of the program. Dynamically linked libraries are more modular, allowing
+programs to share the libraries and keep program sizes small. The
+downside of dynamically linked and mutually shared libraries is that
+the compatibility of the program and library can be out of sync. For
+instance, if the dynamic library is updated to a newer version it
+may become incompatible with the executable which will not be discovered
+until that program is run. As static libraries errors are found at
+compile time, dynamic libraries are found during run-time usually
+via a program crash.
 
 \section*{Getting Started \label{sec:Getting-Started}}
 
+To get started with using C libraries, we will demonstrate how to
+add one of the most common libraries, the math library. To include
+a library for a command line compilation add the '-l' option followed
+by the name of the library.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// m is shorten form for the math library.
+gcc main.c -lm -o myProgram
+\end{lstlisting}
+
+To find the system directory containing your .so or .a files use the
+following gcc command.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// This will show the full path for the libc.a file
+// other standard lib files will be at the same location.
+gcc --print-file-name=libc.a
+\end{lstlisting}
+
+
+\section*{Examples \label{sec:Examples}}
+
+In this example, we will create a static library, the static library
+only has one function to calculate the mean of two numbers. The files
+myLib.h and myLib.c contain the contents of static library.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// .h with one function taking 2 doubles
+double mean(double, double); 
+
+// .c contains the implementation
+double mean(double a, double b )
+{         
+	return (a+b)/2.0;
+} 
+\end{lstlisting}
+
+Now we need to compile our static library files to insure they work
+correctly. Compile the two files and create an object file using the
+following command:
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+gcc -c myLib.c -o myLib.o
+\end{lstlisting}
+
+This creates a single object file, if your programming add additional
+files or makes files you could use all the objects files in your static
+library. Next, we create the static library file using the ar command.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// ar command archieves the files into one
+// You must include all required object files
+// c option indicates to create lib if does not exist
+// r option indicates to replace older *.o files
+
+ar rc libmean.a myLib.o
+\end{lstlisting}
+
+As previously mentioned, a static files contains all the files required
+at compile time, so it must include every object related to the library.
+Once the static library is created it needs to be indexed so that
+the compiler can link and identify internal symbols. 
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// ranlib command indexes the lib file for compiler
+ranlib libmean.a
+\end{lstlisting}
+
+Once you've created and index your library, you can use in other projects
+and programs by including it directory in your compile statements
+as follows. This gcc call includes setting path information for local
+libraries using the '-L' option and indicating the name of the library
+'-l' option. Once compiled, you can run your program as normal using
+./meanMain. Additionally, if you change meanMain.c you don't need
+to complete the previous steps for your library, only if you're library
+changes do you need to recompile the library.
+
+\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+// ranlib command indexes the lib file for compiler
+// -L indicates a path to the lib folder
+// -l indicates the name of the library
+// 	-l ignore the prefix 'lib'
+gcc meanMain.c -L./lib -lmean.a -o meanMain
+\end{lstlisting}
 
 
 \section*{Additional Information \label{sec:Additional-Information}}
-
-
 \begin{itemize}
-\item Main Website 
-\item Official Manual 
-\item
+\item \url{http://www.cs.dartmouth.edu/~campbell/cs50/buildlib.html} 
+\item \url{http://www.adp-gmbh.ch/cpp/gcc/create_lib.html} 
+\item \url{http://docencia.ac.upc.edu/FIB/USO/Bibliografia/unix-c-libraries.html#creating_static_archive} 
 \end{itemize}
 
 \end{document}
