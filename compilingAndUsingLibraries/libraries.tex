@@ -45,7 +45,7 @@
 
 \section*{Overview}
 
-The command shell, command line, or shell is an user interface which
+The command shell, command line, or shell is a user interface which
 interacts directly with the operating system. Mastering fundamentals
 of the command shell will be integral in developing your labs and
 assignments throughout the course. We will discuss the most common
@@ -58,8 +58,7 @@ additional resources.
 Upon successful completion of this review, you should be able to: 
 \begin{itemize}
 \item comprehend how to include a C-Library
-\item include C-Libraries in your make files
-\item differentiate between library types
+\item differentiate between static and dynamic library types
 \item develop and use your own static C-Library
 \end{itemize}
 
@@ -68,18 +67,18 @@ Upon successful completion of this review, you should be able to:
 Software code libraries provide a convenient method for programmers
 and projects to share common functionality. The C programming language
 contains many libraries that can be included. By default, when you
-use gcc the library libc.a is automatically included. Typically, libraries
+use GCC the library libc.a is automatically included. Typically, libraries
 files are prefixed with 'pre'. Two types of libraries exist, statically
-linked ( .{*}a ) and dynamic linked ( {*}.so ), thus libc.a is a statically
-linked library for the c language. On a Linux system, standard libraries
-are typically stored in '/lib' or '/usr/lib'. Statically linked libraries
-or static libaries are organized sets of software code that can be
-called external once compiled. When a program or executables compiles
-and links using a static library, a copy of the static libary is copied
-and included in the executable. If the code in the static library
-needs to change, the entire executable must be recompiled. This means
-the executable is a complete unit by itself without external resources,
-but is quite large in size.
+linked ( .{*}a ) and dynamically linked ( {*}.so ), thus libc.a is
+a statically linked library for the c language. On a Linux system,
+standard libraries are typically stored in '/lib' or '/usr/lib'. Statically
+linked libraries or static libraries are organized sets of software
+code that can be called external once compiled. When a program or
+executable compiles and links using a static library, a copy of the
+static library is copied and included in the executable. If the code
+in the static library needs to change, the entire executable must
+be recompiled. This means the executable is a complete unit by itself
+without external resources but is quite large in size.
 
 Dynamically linked libraries (DLL) or dynamically linked shared object
 libraries (.so) are libraries that are linked at runtime. Dynamically
@@ -99,7 +98,7 @@ via a program crash.
 
 To get started with using C libraries, we will demonstrate how to
 add one of the most common libraries, the math library. To include
-a library for a command line compilation add the '-l' option followed
+a library for a command line compilation adds the '-l' option followed
 by the name of the library.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
@@ -108,7 +107,7 @@ gcc main.c -lm -o myProgram
 \end{lstlisting}
 
 To find the system directory containing your .so or .a files use the
-following gcc command.
+following GCC command.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
 // This will show the full path for the libc.a file
@@ -117,11 +116,11 @@ gcc --print-file-name=libc.a
 \end{lstlisting}
 
 
-\section*{Examples \label{sec:Examples}}
+\section*{Static Library Example \label{sec:Examples}}
 
 In this example, we will create a static library, the static library
 only has one function to calculate the mean of two numbers. The files
-myLib.h and myLib.c contain the contents of static library.
+myLib.h and myLib.c contain the contents of the static library.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
 // .h with one function taking 2 doubles
@@ -134,7 +133,7 @@ double mean(double a, double b )
 } 
 \end{lstlisting}
 
-Now we need to compile our static library files to insure they work
+Now we need to compile our static library files to ensure they work
 correctly. Compile the two files and create an object file using the
 following command:
 
@@ -142,7 +141,7 @@ following command:
 gcc -c myLib.c -o myLib.o
 \end{lstlisting}
 
-This creates a single object file, if your programming add additional
+This creates a single object file if your programming adds additional
 files or makes files you could use all the objects files in your static
 library. Next, we create the static library file using the ar command.
 
@@ -155,10 +154,10 @@ library. Next, we create the static library file using the ar command.
 ar rc libmean.a myLib.o
 \end{lstlisting}
 
-As previously mentioned, a static files contains all the files required
-at compile time, so it must include every object related to the library.
-Once the static library is created it needs to be indexed so that
-the compiler can link and identify internal symbols. 
+As previously mentioned, a static library file contains all the files
+required at compile time, so it must include every object related
+to the library. Once the static library is created it needs to be
+indexed so that the compiler can link and identify internal symbols. 
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
 // ranlib command indexes the lib file for compiler
@@ -166,8 +165,8 @@ ranlib libmean.a
 \end{lstlisting}
 
 Once you've created and index your library, you can use in other projects
-and programs by including it directory in your compile statements
-as follows. This gcc call includes setting path information for local
+and programs by including its directory in your compile statements
+as follows. This GCC call includes setting path information for local
 libraries using the '-L' option and indicating the name of the library
 '-l' option. Once compiled, you can run your program as normal using
 ./meanMain. Additionally, if you change meanMain.c you don't need
