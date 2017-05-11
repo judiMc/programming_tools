@@ -12,21 +12,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \date{ }
 
-
-
 \usepackage{babel}
 \usepackage{listings}
 \renewcommand{\lstlistingname}{Listing}
 
-
-
-
-
 \usepackage{babel}
 \usepackage{listings}
 \renewcommand{\lstlistingname}{Listing}
-
-
 
 \usepackage{babel}
 \usepackage{listings}
@@ -55,7 +47,7 @@ additional resources.
 
 \section*{Learning Outcomes \label{sec:Learning-Outcomes}}
 
-Upon successful completion of this review, you should be able to: 
+Upon successful completion of this review, you should be able to:
 \begin{itemize}
 \item comprehend how to include a C-Library
 \item differentiate between static and dynamic library types
@@ -69,11 +61,11 @@ and projects to share common functionality. The C programming language
 contains many libraries that can be included. By default, when you
 use GCC the library libc.a is automatically included. Typically, libraries
 files are prefixed with 'pre'. Two types of libraries exist, statically
-linked ( .{*}a ) and dynamically linked ( {*}.so ), thus libc.a is
+linked ( {*}.a ) and dynamically linked ( {*}.so ), thus libc.a is
 a statically linked library for the c language. On a Linux system,
 standard libraries are typically stored in '/lib' or '/usr/lib'. Statically
 linked libraries or static libraries are organized sets of software
-code that can be called external once compiled. When a program or
+code that can be used by other programsm once compiled. When a program or
 executable compiles and links using a static library, a copy of the
 static library is copied and included in the executable. If the code
 in the static library needs to change, the entire executable must
@@ -102,7 +94,7 @@ a library for a command line compilation adds the '-l' option followed
 by the name of the library.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-// m is shorten form for the math library.
+# m is shortened name for the math library.
 gcc main.c -lm -o myProgram
 \end{lstlisting}
 
@@ -110,8 +102,8 @@ To find the system directory containing your .so or .a files use the
 following GCC command.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-// This will show the full path for the libc.a file
-// other standard lib files will be at the same location.
+# This will show the full path for the libc.a file
+# other standard lib files will be at the same location.
 gcc --print-file-name=libc.a
 \end{lstlisting}
 
@@ -122,15 +114,15 @@ In this example, we will create a static library, the static library
 only has one function to calculate the mean of two numbers. The files
 myLib.h and myLib.c contain the contents of the static library.
 
-\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+\begin{lstlisting}[language=c,showstringspaces=false,tabsize=4,frame=TB]
 // .h with one function taking 2 doubles
-double mean(double, double); 
+double mean(double, double);
 
 // .c contains the implementation
 double mean(double a, double b )
-{         
+{
 	return (a+b)/2.0;
-} 
+}
 \end{lstlisting}
 
 Now we need to compile our static library files to ensure they work
@@ -146,10 +138,10 @@ files or makes files you could use all the objects files in your static
 library. Next, we create the static library file using the ar command.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-// ar command archieves the files into one
-// You must include all required object files
-// c option indicates to create lib if does not exist
-// r option indicates to replace older *.o files
+# ar command compresses the files into an archive
+# You must include all required object files
+# c option indicates to create lib if does not exist
+# r option indicates to replace older *.o files
 
 ar rc libmean.a myLib.o
 \end{lstlisting}
@@ -157,14 +149,14 @@ ar rc libmean.a myLib.o
 As previously mentioned, a static library file contains all the files
 required at compile time, so it must include every object related
 to the library. Once the static library is created it needs to be
-indexed so that the compiler can link and identify internal symbols. 
+indexed so that the compiler can link and identify internal symbols.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-// ranlib command indexes the lib file for compiler
+# ranlib command indexes the lib file for compiler
 ranlib libmean.a
 \end{lstlisting}
 
-Once you've created and index your library, you can use in other projects
+Once you've created and indexed your library, you can use in other projects
 and programs by including its directory in your compile statements
 as follows. This GCC call includes setting path information for local
 libraries using the '-L' option and indicating the name of the library
@@ -174,19 +166,19 @@ to complete the previous steps for your library, only if you're library
 changes do you need to recompile the library.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-// ranlib command indexes the lib file for compiler
-// -L indicates a path to the lib folder
-// -l indicates the name of the library
-// 	-l ignore the prefix 'lib'
+# ranlib command indexes the lib file for compiler
+# -L indicates a path to the lib folder
+# -l indicates the name of the library
+# -l ignore the prefix 'lib'
 gcc meanMain.c -L./lib -lmean.a -o meanMain
 \end{lstlisting}
 
 
 \section*{Additional Information \label{sec:Additional-Information}}
 \begin{itemize}
-\item \url{http://www.cs.dartmouth.edu/~campbell/cs50/buildlib.html} 
-\item \url{http://www.adp-gmbh.ch/cpp/gcc/create_lib.html} 
-\item \url{http://docencia.ac.upc.edu/FIB/USO/Bibliografia/unix-c-libraries.html#creating_static_archive} 
+\item \url{http://www.cs.dartmouth.edu/~campbell/cs50/buildlib.html}
+\item \url{http://www.adp-gmbh.ch/cpp/gcc/create_lib.html}
+\item \url{http://docencia.ac.upc.edu/FIB/USO/Bibliografia/unix-c-libraries.html#creating_static_archive}
 \end{itemize}
 
 \end{document}
