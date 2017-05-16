@@ -63,7 +63,7 @@ compiling your code. Once the executable is compiled and linked, you
 can use Valgrind to evaluate your program by running:
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-Valgrind ./yourExecutableName
+valgrind ./yourExecutableName
 \end{lstlisting}
 
 By default, Valgrind runs only memcheck, the output from memcheck
@@ -107,15 +107,15 @@ Debugger ), DRD ( Multithreaded errors).
 Here is an example of using the Valgrind with Cachegrind tool.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-Valgrind --tool=cachegrind ./yourExecutableName
+valgrind --tool=cachegrind ./yourExecutableName
 \end{lstlisting}
 
 
 \section*{Additional Information \label{sec:Additional-Information}}
 \begin{itemize}
-\item \url{http://Valgrind.org/docs/manual/quick-start.html}
-\item \url{http://Valgrind.org/info/tools.html}
-\item \url{http://cs.ecs.baylor.edu/~donahoo/tools/Valgrind/}
+\item \url{http://valgrind.org/docs/manual/quick-start.html}
+\item \url{http://valgrind.org/info/tools.html}
+\item \url{http://cs.ecs.baylor.edu/~donahoo/tools/valgrind/}
 \end{itemize}
 
 \end{document}

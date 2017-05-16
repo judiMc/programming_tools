@@ -34,8 +34,8 @@
 Command-line arguments allow a user or another program to specify
 information to be passed into a program. This allows the user to customize
 the behavior of the command-line run programs. This review will provide
-a basic introduction to the topic, including a \textquotedblleft Getting
-Started\textquotedblright{} example and some common best practice.
+a basic introduction to the topic, including a ``Getting
+Started" example and some common best practice.
 
 \section*{Learning Outcomes \label{sec:Learning-Outcomes}}
 
@@ -43,45 +43,44 @@ Upon successful completion of this review, you should be able to:
 \begin{itemize}
 \item recognize the benefits of command-line arguments
 \item validate user input command-line arguments
-\item create validate program which accept user provided arguments.
+\item create valid programs which accept user provided arguments.
 \end{itemize}
 
 \section*{Introduction \label{sec:Introduction}}
 
-Command-line arguments are pieces of information based on a program
-before running your program. Each argument provides either data to
-the program or information about how to customize behavior such output.
-The standard for command line arguments is to use either a single
-dash '-' followed by a single letter or double dash '\textendash '
-followed by a word. A simple example of command line arguments in
-use is in your terminal type, using the list function 'ls'. The list
-command will list all the files in the directory if provided the command
-line argument ``-a or -{}-all\textquotedblright , sometimes referred
-to as flags, a list will provide all files in the directory including
-hidden files.
+Command-line arguments are options which may be passed to a program,
+usually providing external data to the program or information about how to
+customize behavior such as output.
+The convention used to specify command line arguments in program design
+is to use either a single dash '-' followed by a single letter or double
+dash '-{}-' followed by a word. A simple example can be demonstrated using
+the program 'ls'. This command will list all the files in the current
+directory. If provided a command line argument (sometimes referred to
+as a ``flag"), such as \texttt{-a} or \texttt{-{}-all}, the output will show all files
+in the directory including hidden files.
 \begin{center}
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-//Note: These two produce the same output.
+# Note: These two produce the same output.
 ls -a
 ls --all
 
-//This produces a different result, but is the same program.
+# This produces a different result, but is the same program.
 ls
 
-// To see the full list of command line arguments for ls
+# To see the full list of command line arguments for ls
 man ls
 \end{lstlisting}
-\par\end{center}
+\end{center}
 
 Most professional software that uses a command line interface follows
-this similar command line argument pattern. If you which to see the
-full list of available arguments for a program you can retrieve the
-manual by typing. As many command line arguments as needed can be
-added to a single command for instance if we extend the original ls
-example to add the flag ``-l'' after the ``-a'', the output would
-display more information about each file. The remainder of this review
-provides instruction for creating and managing your own command line
-arguments.
+this similar command line argument pattern. If you wish to see the
+full list of available arguments for a program, you can retrieve the
+manual by executing \texttt{man program}. Program may permit one to pass
+multiple command line arguments at once. For instance, if we extend the
+original \texttt{ls} example to add the flag \texttt{-l} after the
+\texttt{-a}, the output would display more information about each file.
+The remainder of this review provides instruction for creating and managing
+your own command line arguments.
 
 \section*{Getting Started \label{sec:Getting-Started}}
 
@@ -98,7 +97,7 @@ that where presented at the start of the program. The second, argv
 presented to the program as arguments.
 
 \begin{lstlisting}[language=make,tabsize=4,frame=TB]
-int main( int argc, char ** argv ) 
+int main( int argc, char ** argv )
 \end{lstlisting}
 
 It is important to note that argc is always at least 1, the first
@@ -116,11 +115,11 @@ argv{[}1{]} would store ``someFile.txt'', argv{[}2{]} would have
 
 \section*{Example \label{sec:Examples} }
 
-Let's examine a more practical example, here is an example of the
-main function that is available at (\href{file:./code/main.c}{Command Line Arguments main.c}).
-The main is basically empty except that it checks for command line
-arguments. Argc is essential to ensure the proper number of variables
-exists, all of the data is stored in argv.
+Let's examine a more practical example, here is an example of the main
+function that is available at (\href{run:./code/main.c}
+{Command Line Arguments main.c}). The main is basically empty except that
+it checks for command line arguments. Argc is essential to ensure that the
+proper number of variables exists, and all of the data is stored in argv.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
 /**
@@ -131,14 +130,14 @@ exists, all of the data is stored in argv.
 #include<stdlib.h>
 #include<stdio.h>
 
-int main( int argc, char ** argv ) 
+int main( int argc, char ** argv )
 {
 	/* Argc is the argument counter
 	   It indicates the number of passed in parameters.
 
-	   Argv is the actual parameters being passed in.	
+	   Argv is the actual parameters being passed in.
 
-	   Note that the first argument (argv[0]) is the program name.	
+	   Note that the first argument (argv[0]) is the program name.
 	*/
 
 	if( argc == 1 ) {
@@ -148,13 +147,13 @@ int main( int argc, char ** argv )
 	}
 
 	if( argc > 1 && argc < 4) {
-		// The first parameter is the program being run 
+		// The first parameter is the program being run
 		char * programName = argv[0];
 		printf("Here is what you ran: %s\n", programName );
-		
+
 		// Your first parameter is a filename
 		char* filename = argv[1];
-	
+
 		// The second parameter is an integer
 		int someNumber = atoi(argv[2]);
 
@@ -165,7 +164,7 @@ int main( int argc, char ** argv )
 		// You should check to make sure you get all the intended arguments.
 		// More args could  harmless but could also be a bad sign.
 		printf("An invalid number of arguments. Please see the description");
-	}	
+	}
 	return 0;
 }
 \end{lstlisting}
@@ -176,7 +175,7 @@ command-line parameters and does not receive them. The code snippet
 below demonstrates that if you don't receive any arguments you can
 provide a description of what your program does and/or expects to
 run properly. The else statement at the end of the main function performs
-a similar action, except that too many arguments have been provided. 
+a similar action, except that too many arguments have been provided.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
 if( argc == 1 ) {

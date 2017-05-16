@@ -81,13 +81,13 @@ int main(int argc, char** argv)
 {
     printf("Hello\n");
 	return 0;
-} 
+}
 \end{lstlisting}
 
 To compile and link this file use the following command.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-// Compile and link code in the same command
+# Compile and link code in the same command
 gcc main.c -o sayHello
 \end{lstlisting}
 
@@ -96,7 +96,7 @@ which is the name of your executable code. If you wanted to separate
 the compiling and linking code you would use to calls to GCC as such:
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-// The first command compiles, the second links the object files
+# The first command compiles, the second links the object files
 gcc -c main.c
 gcc main.o -o sayHello.
 \end{lstlisting}
@@ -108,14 +108,14 @@ If you want to review the options GCC provides for yourself here are
 some helpful command line calls.
 
 \begin{lstlisting}[language=make,tabsize=4,frame=TB]
-// To get additional help from the command line
-// Get the manual
+# To get additional help from the command line
 man gcc
 
-// For all help
+# For all help
 gcc --help
 
-//Or more specifc help are warning,common, target, and params are options.
+# Or more specifc help, specify one of warning, common, target, or params
+# as a help option.
 gcc --help=warning
 \end{lstlisting}
 
@@ -128,7 +128,7 @@ multiple .c files into a single executable by simply including the
 additional filenames.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-//Case 1
+# Case 1
 gcc fileOne.c fileTwo.c -o outProgram
 \end{lstlisting}
 
@@ -138,7 +138,7 @@ If all your source files are properly stored in src directory, you
 could compile them with the following:
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-//Case 1
+# Case 1
 gcc ./src/* -I ./include
 \end{lstlisting}
 
@@ -154,7 +154,7 @@ the exact actions the compiler will take
 \subsection*{Useful Flags\label{subsec: Useful flags}}
 
 The following is a list of common and helpful command line arguments
-or flags to use when running GCC. 
+or flags to use when running GCC.
 \begin{lyxlist}{00.00.0000}
 \item [{-I}] indicates a location for header files, you can use it multiple
 times if needed.

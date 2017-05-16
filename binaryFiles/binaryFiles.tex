@@ -42,11 +42,11 @@ will discuss the reasoning and benefits to the topic, including a
 
 \section*{Learning Outcomes \label{sec:Learning-Outcomes}}
 
-Upon successful completion of this review, you should be able to: 
+Upon successful completion of this review, you should be able to:
 \begin{itemize}
 \item recognize the benefits of binary files
-\item create a binary file from a programming example 
-\item execute a binary 
+\item create a binary file from a programming example
+\item execute a binary
 \end{itemize}
 
 \section*{Introduction \label{sec:Introduction}}
@@ -58,10 +58,10 @@ programs. For instance an image files often contains brief XML data
 about how the image is store followed by a large matrix of numerical
 data representing the colors or pixels of an image. Many types of
 binary files can be opened with a regular text editor, however the
-result is often a file filled with unreadable content. 
+result is often a file filled with unreadable content.
 
 Binary files provide an more efficient method of storing data files
-in comparison to text files. If you consider the zipping a regular
+in comparison to text files. If you consider zipping a regular
 text file, the zipped file is a binary file. The zipped file is smaller
 size, which requires less memory to store on the system and faster
 network transfer speeds.
@@ -76,16 +76,19 @@ Any computer program needs to be converted to a machine readable format
 before execution. This allows the computer to interpret the instructions
 in a language it understands. Compiled computer programs are often
 stored in a binary file in hexadecimal, also know as hex, which is
-a set of hexadecimal numbers representing the original instructions. 
+a set of hexadecimal numbers representing the original instructions.
 
 \section*{Getting Started \label{sec:Getting-Started}}
 
 Most binary files types have a specific program that opens or executes
 the file type. For instance most operating systems contains an image
-viewer program that opens the most common types of images. Since computer
-programs are compiled into a hex format, you will need to use a hex
-viewer to interpret the contents of the executable. Viewing hexadecimal
-of your program or the output is often not overkill since most debuggers
+viewer program that opens the most common types of images.
+
+If you want to look at a compiled binary file for analysis, it may be
+helpful to use a program that interprets the binary as hexadecimal.
+You can use a hex viewer to interpret the contents of an executable, and
+this is often done in the process or reverse engineering. Viewing hexadecimal
+of your program or an output file can be very helpful since most debuggers
 help translate the errors back into a human readable format.
 
 To generate a binary file of a computer program, we simply need to
@@ -111,8 +114,9 @@ As previously mentioned, storing files in binary format reduces the
 storage requirements of the system and also improves speed of access.
 When reading and writing binary files, there is the added advantage
 that you can instantly read from any location in the file, more specifically
-you can seek a position to start reading without reading the previous
-sections, this can not be accomplished with text files.
+you can ``seek" to a position to start reading, without having to read any
+previous or irrelevant sections. This can not be easily accomplished with
+text files.
 
 The following example, binaryExample.c demonstrates the key functions
 involved in creating and reading binary files. The following code
@@ -130,61 +134,62 @@ typedef struct {
 } Point2D;
 
 int main( int argc, char ** argv ) {
+    FILE * file = NULL;
+    Point2D pt;
 
-        FILE * file = NULL;
-        Point2D pt;
+    file = fopen("testFile.bin", "rb");
 
-        file = fopen("testFile.bin", "rb");
+    if( !file ) {
 
-        if( !file ) {
+        // If the testFile bin does not already exist, then
+        // populate it wth some data.
 
-                // If the testFile bin does not already exist populate it wth some data.
+        file  = fopen("testFile.bin", "wb");
 
-                file  = fopen("testFile.bin", "wb");
-
-                // Return can't read or write
-                if(!file){
-                        printf("Unable to read or write file.");
-                        return 1;
-                }
-
-                for( int i = 0; i < 5; i++ ) {
-                        pt.x = i;
-                        pt.y = i * 3;
-
-                        fwrite(&pt,sizeof(Point2D), 1, file);
-                }
-
-                printf("Testfile.bin has been written, it's a binary file.\n");
-				printf("Open it with a text editor to see it's not readable\n");
-                printf("rerun this program, to view the data was created in binary.\n");
+        // Return can't read or write
+        if(!file){
+            printf("Unable to read or write file.");
+            return 1;
         }
-        else {
-                // Read all of the examples and print
-                for( int i = 0; i < 5; i++ )
-                {
-                        fread(&pt, sizeof(Point2D), 1, file );
-                        printf("Data was read: %d %d\n", pt.x, pt.y );
-                }
 
-                printf("**********************Seek File position\n");
+        for( int i = 0; i < 5; i++ ) {
+            pt.x = i;
+            pt.y = i * 3;
 
-            // Print a specific example, seek a specific position in the file
-                // The read from that position
-                fseek(file,sizeof(Point2D)*2, SEEK_SET);
-                fread(&pt, sizeof(Point2D), 1, file );
-                printf("Data was read: %d %d\n", pt.x, pt.y );
-
-                printf("**********************Rewind File\n");
-
-
-                // Print the first value again, because we've rewound the file.
-                rewind(file);
-                fread(&pt, sizeof(Point2D), 1, file );
-                printf("Data was read: %d %d\n", pt.x, pt.y );
+            fwrite(&pt,sizeof(Point2D), 1, file);
         }
-        fclose(file);
-        return 0;
+
+        printf("Testfile.bin has been written, it's a binary file.\n");
+        printf("Open it with a text editor to see it's not readable\n");
+        printf("rerun this program to view the data that ");
+        printf("was created in binary.\n");
+    }
+    else {
+        // Read all of the examples and print
+        for( int i = 0; i < 5; i++ )
+        {
+            fread(&pt, sizeof(Point2D), 1, file );
+            printf("Data was read: %d %d\n", pt.x, pt.y );
+        }
+
+        printf("**********************Seek File position\n");
+
+        // Print a specific example, seek a specific position in the file
+        // The read from that position
+        fseek(file,sizeof(Point2D)*2, SEEK_SET);
+        fread(&pt, sizeof(Point2D), 1, file );
+        printf("Data was read: %d %d\n", pt.x, pt.y );
+
+        printf("**********************Rewind File\n");
+
+
+        // Print the first value again, because we've rewound the file.
+        rewind(file);
+        fread(&pt, sizeof(Point2D), 1, file );
+        printf("Data was read: %d %d\n", pt.x, pt.y );
+    }
+    fclose(file);
+    return 0;
 }
 \end{lstlisting}
 
@@ -192,7 +197,7 @@ The first thing to note about this program is how to open and read
 binary files, the process is nearly identical to opening a normal
 test file.
 
-\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+\begin{lstlisting}[language=c,showstringspaces=false,tabsize=4,frame=TB]
 // Add a b to open a binary file for reading
 file = fopen("testFile.bin", "rb");
 
@@ -201,7 +206,7 @@ file = fopen("testFile.bin", "wb");
 \end{lstlisting}
 After a binary file is open the reading and writing actions are:
 
-\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+\begin{lstlisting}[language=c,showstringspaces=false,tabsize=4,frame=TB]
 // Read a Point2D, the size of struct, number to read from which file.
 fread(&pt, sizeof(Point2D), 1, file );
 
@@ -221,7 +226,7 @@ the item in the array. The fseek function takes the file, the position
 to start and ENUM indicating the method to apply, in this case we
 are setting the position.
 
-\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
+\begin{lstlisting}[language=c,showstringspaces=false,tabsize=4,frame=TB]
 // Print a specific example, seek a specific position in the file
 // The read from that position
 fseek(file,sizeof(Point2D)*2, SEEK_SET);

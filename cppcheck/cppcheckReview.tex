@@ -70,27 +70,27 @@ an overview of the Cppcheck arguments and options. The code for this
 review is available at (\#\#TODO: Link here\#\#). Here is an example
 main.c file used to demonstrate different properties of Cppcheck.
 
-\begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-/*  Purpose: This file purposely contains errors to be identified by Cppcheck.  
-	File: main.c 
+\begin{lstlisting}[language=c,showstringspaces=false,tabsize=4,frame=TB]
+/*  Purpose: This file purposely contains errors to be identified by Cppcheck.
+	File: main.c
 	University of Guelph, 2017.
 */
-#include<stdio.h> 
+#include<stdio.h>
 #include<stdlib.h>
-#include<string.h> 
+#include<string.h>
 #include<time.h>
 
-/**This function does not and is not called.  
- *@pre No pre conditions  
- *@post No post conditions  
+/**This function does not and is not called.
+ *@pre No pre conditions
+ *@post No post conditions
  *@param a void pointer that does nothing.
-**/ 
+**/
 void doNotRunMe(const void* vp) { return; }
 
-int main(int argc, char ** argv) {   
-	 // The following code purposely contains errors    
+int main(int argc, char ** argv) {
+	// The following code purposely contains errors
 	// Ensure you can identify the same errors with gcc or Cppcheck.
-    int * leakyPtr = malloc(sizeof(int) );  
+    int * leakyPtr = malloc(sizeof(int) );
 	*leakyPtr = 5;
     printf("The value is : %d ", leakyPtr);
     printf("The value is : %d ", *leakyPtr);
@@ -102,7 +102,7 @@ int main(int argc, char ** argv) {
 	}
     printf("ChPtr=%c", *chptr);
     return 0;
-} 
+}
 \end{lstlisting}
 
 When you run Cppcheck on this single file type, you should see feedback
@@ -110,9 +110,9 @@ similar the following output:
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
 > cppcheck main.c
 
-//Output
-Checking main.c... 
-[main.c:39]: (error) Memory leak: chptr 
+# Output
+Checking main.c...
+[main.c:39]: (error) Memory leak: chptr
 [main.c:46]: (error) Memory leak: leakyPtr
 \end{lstlisting}
 
@@ -128,7 +128,7 @@ flag) if desired but the standard output format should be sufficient.
 \subsection*{Flags\label{subsec:Variables}}
 
 This section discusses the most commonly used Cppcheck flags, these
-are all available for review in the Cppcheck manual. 
+are all available for review in the Cppcheck manual.
 
 \subsubsection*{Enable}
 
@@ -137,26 +137,26 @@ to the user, by default most errors are not enable, to quickly enable
 all errors type
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-cppcheck --enable=all main.c 
+cppcheck --enable=all main.c
 
-//Output
+# Output
 [main.c:31]: (warning) %d in format string (no. 1) requires
-			'int' but the argument type is 'int *'. 
+			'int' but the argument type is 'int *'.
 
 [main.c:42]: (warning) Possible null pointer dereference: chptr
 [main.c:38] ->
 [main.c:39]: (style) Variable 'chptr' is reassigned
-			a value before the old one has been used. 
+			a value before the old one has been used.
 
-[main.c:39]: (error) Memory leak: chptr 
-[main.c:46]: (error) Memory leak: leakyPtr 
-[main.c:19]: (style) The function 'doNotRunMe' is never used. 
+[main.c:39]: (error) Memory leak: chptr
+[main.c:46]: (error) Memory leak: leakyPtr
+[main.c:19]: (style) The function 'doNotRunMe' is never used.
 
 (information) Cppcheck cannot find all the include files
 			(use --check-config for details)
 \end{lstlisting}
 
-When all Cppcheck errors are enabled the output includes many other
+When all Cppcheck errors are enabled, the output includes many other
 types of warnings, suggestions, and recommendations. From the output,
 we observe two additional warnings, the first indicates that the print
 function on Line 31 is actually passing the pointer not the integer
@@ -188,20 +188,20 @@ warnings about your non-included header files add the -I flag and
 your include directory.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-cppcheck --enable=all -I ./include/ main.c 
+cppcheck --enable=all -I ./include/ main.c
 
-//Output
+# Output
 [main.c:31]: (warning) %d in format string (no. 1) requires 'int'
-			but the argument type is 'int *'. 
+			but the argument type is 'int *'.
 
-[main.c:42]: (warning) Possible null pointer dereference: chptr 
+[main.c:42]: (warning) Possible null pointer dereference: chptr
 [main.c:38] ->
 [main.c:39]: (style) Variable 'chptr' is reassigned
-			a value before the old one has been used. 
+			a value before the old one has been used.
 
-[main.c:39]: (error) Memory leak: chptr 
-[main.c:46]: (error) Memory leak: leakyPtr 
-[main.c:19]: (style) The function 'doNotRunMe' is never used. 
+[main.c:39]: (error) Memory leak: chptr
+[main.c:46]: (error) Memory leak: leakyPtr
+[main.c:19]: (style) The function 'doNotRunMe' is never used.
 \end{lstlisting}
 
 
@@ -217,11 +217,11 @@ Errorlist will display all errors Cppcheck searches for in XML format.
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
 cppcheck --enable=all --suppress=missingIncludeSystem --suppress=memleak main.c 
 
-//Output
+# Output
 [main.c:31]: (warning) %d in format string (no. 1) requires 'int'
 			but the argument type is 'int *'.
 
-[main.c:42]: (warning) Possible null pointer dereference: chptr 
+[main.c:42]: (warning) Possible null pointer dereference: chptr
 [main.c:38] -> [main.c:39]: (style) Variable 'chptr' is reassigned
 			a value before the old one has been used.
 
@@ -249,20 +249,20 @@ code to older machines, setting the C/C++ language standard to an
 older version might not include any new errors or warnings.
 
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
-cppcheck --enable=all --language=c --std=c99 ./src/* 
+cppcheck --enable=all --language=c --std=c99 ./src/*
 
-//Output
+# Output
 [src/main.c:33]: (warning) %d in format string (no. 1) requires 'int'
 				but the argument type is 'int *'.
 
-[src/main.c:47]: (warning) Possible null pointer dereference: chptr 
+[src/main.c:47]: (warning) Possible null pointer dereference: chptr
 [src/main.c:40] ->
 [src/main.c:41]: (style) Variable 'chptr' is reassigned
-				a value before the old one has been used. 
+				a value before the old one has been used.
 
-[src/main.c:41]: (error) Memory leak: chptr 
+[src/main.c:41]: (error) Memory leak: chptr
 [src/main.c:51]: (error) Memory leak: leakyPtr
-[src/main.c:21]: (style) The function 'doNotRunMe' is never used. 
+[src/main.c:21]: (style) The function 'doNotRunMe' is never used.
 
 (information) Cppcheck cannot find all the include files
 			(use --check-config for details)
@@ -284,18 +284,18 @@ flag.
 \begin{lstlisting}[language=make,showstringspaces=false,tabsize=4,frame=TB]
 cppcheck --enable=all --language=c --std=c99 --inconclusive -I ./include/ ./src/*
 
-//Output
+# Output
 [src/main.c:33]: (warning) %d in format string (no. 1) requires 'int'
 				but the argument type is 'int *'.
 
-[src/main.c:47]: (warning) Possible null pointer dereference: chptr 
+[src/main.c:47]: (warning) Possible null pointer dereference: chptr
 [src/main.c:40] ->
 [src/main.c:41]: (style) Variable 'chptr' is reassigned
-				a value before the old one has been used. 
+				a value before the old one has been used.
 
-[src/main.c:41]: (error) Memory leak: chptr 
+[src/main.c:41]: (error) Memory leak: chptr
 [src/main.c:51]: (error) Memory leak: leakyPtr
-[src/main.c:21]: (style) The function 'doNotRunMe' is never used. 
+[src/main.c:21]: (style) The function 'doNotRunMe' is never used.
 
 (information) Cppcheck cannot find all the include files
 			(use --check-config for details)
