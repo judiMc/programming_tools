@@ -138,15 +138,16 @@ gcc yourFile.c -o yourProgramName -lcrypto
 \end{lstlisting}
 
 The first requirement of programming using MD5 is including the proper
-md5.h file. The core of the md5Programming example uses the MD5 function
-to convert a string into a hash value. The example uses a static string,
+md5.h file. The core of the md5Programming example shown below uses the MD5 function
+to convert a string into a hash value. 
+
+The example uses a static string,
 however, you could load this string with the contents of a file. It's
 important to note that MD5 is 128 bits, a char is usually 8-bits and
 the digest contains 16 values, 8{*}16 = 128 bits. The sprintf converts
 each digest value into a 2 digit hexadecimal value for display. The
 MD5 function is a shorthand for multiple steps in running the MD5
-algorithm, if you need to separate the steps the commands are demonstrated
-in the example file.
+algorithm.  A slightly more complex example is given in the programming tools github repository (\url{https://github.com/judiMc/programming_tools})
 
 \begin{lstlisting}[language={C++},tabsize=4,frame=TB]
 #include <openssl/md5.h> 

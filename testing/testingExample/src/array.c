@@ -10,6 +10,11 @@
 #include "array.h"
 
 /****************************** Dummy Structure to show testing ******************************/
+/********
+This is an example ADT for an Array.  The test harness should test
+each of the functions in the array.
+
+*/
 Array* createArray(int arraySize)
 {
 	Array* temp = NULL;

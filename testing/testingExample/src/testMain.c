@@ -23,7 +23,10 @@ int main(int argc, char ** argv)
 	/* This is a simple test, it shows that you should validate the response.
            We could even check if *p == 101 to validate.
 	   What does this test, that the int pointer, points to the correct value.
-	   That the dereference operator works
+	   That the dereference operator works.  
+
+	   This test is not testing any part of the array library, it is just here to
+	   demonstrate a simple test case to you.
 	*/
 	
 	int num = 101;
