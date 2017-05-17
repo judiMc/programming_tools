@@ -26,7 +26,7 @@ You will need pdflatex and make to generate PDFs for the review material.
     
   or
   
-  2) If you don't have make installed use you can use pdflate to compile
+  2) If you don't have make installed use you can use pdflatex to compile
   ex) pdflatex cppcheckReview.tex
 
 ### Mac
