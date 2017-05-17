@@ -1,6 +1,4 @@
 # programming_tools
-Programming tools and techniques for C programmers
-# programming_tools
 This repository contains useful introductory programming material such as tools and technique specifically focusing on C language.
 
 The material within this repository was created to support students learning and development. As such, the repositiory is open to contributions and suggestions from students. If you wish to contribute or suggest new topics please create new issues or pull requests.
