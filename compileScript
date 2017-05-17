@@ -1,0 +1,13 @@
+#!/bin/bash
+# This script runs make for each directory, assumes Makefile exists
+# Checks for Makefile and .tex file.
+
+for d in */; do
+	echo "$d"
+	cd "$d"
+	FILE="Makefile" 
+	if [ -f $FILE  -a -f *".tex" ]; then
+		make -s
+	fi
+	cd ..
+done
