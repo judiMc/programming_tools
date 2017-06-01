@@ -75,19 +75,7 @@ Doxygen is supported by Linux x86-64, Windows, and Mac OS X 10.5 and later, thou
 It's website url is www.doxygen.org/, where its binaries are available.
 Doxygen may be compiled from source with dependencies 'make' and 'cmake' on Unix-like machines.
 
-
-\begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
-	git clone https://github.com/doxygen/doxygen.git
-	cd doxygen
-
-	mkdir build
-	cd build
-	cmake -G "Unix Makefiles" ..
-	make
-
-	make install
-	
-\end{lstlisting}
+Doxygen is installed on the school computers already, but if you wish to use it at home you'll need to install it.
 
 \medskip{}
 
@@ -95,12 +83,15 @@ Once installed, the program may be invoked at command line via 'Doxygen' (case s
 Before we begin documenting source code, we may create a 'Doxyfile' used to modify
 our output file in the directory containing our programming project.
 
+You can start with a blank doxyfile by asking doxygen to create the template for you.
 \noindent \begin{center}
 \begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
 	cd [codeProject]
-	Doxygen -g [name]
+	doxygen -g [name]
 \end{lstlisting}
 \par\end{center}
+
+You can also use a file from a different project and change the source directory and any other info that needs changing.
 
 \medskip{}
 
@@ -109,9 +100,13 @@ will be the name that it is given in the [name] parameter. Now that we have this
 we may use it to parse our documentation. First, we need to create documentation.
 This review will demonstrate an example .h header C file and how to properly comment.
 
+
+
 \section*{Using Doxygen}
 
-This is an example .h file:
+Doxygen works by parsing comments to find specific markup symbols.  The markup is used to tell doxygen what the different parts of the comments are.  It works very much like the javadoc tool for java documentation, but is available for more languages.
+
+Below is an example .h file:
 
 
 \begin{lstlisting}[showstringspaces=false,tabsize=4,frame={T|B}]
@@ -169,6 +164,9 @@ Same .h file with two different types of Doxygen comments:
 	 **/
 	float div(int a, int b);
 \end{lstlisting}
+
+
+Doxygen looks at comment blocks that begin with a slash followed by two asterisks.   It looks for field names that begin with the @ symbol.   Doxygen has a rich set of operations and functionality. For this course we're really just using the basics to generate documentation.
 
 For more on Doxygen comment blocks see the Doxygen tutorial :
 

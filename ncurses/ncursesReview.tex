@@ -1,0 +1,229 @@
+%% LyX 2.2.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1cm,rmargin=1in}
+\usepackage{url}
+\usepackage{amsmath}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{ }
+
+
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\title{Review: NCurses}
+\maketitle
+
+\section*{Overview}
+
+Terminal-based programs suffer from the inability to rewrite portions of the screen to update changing data.  As a result the information scrolls past the user, instead of simply updating.    In order to remedy this problem, we need a way to write data to specific locations on the screen.   While we could write our own functions to do this,  the more common way  is to use a pre-written (and thoroughly tested)  library for User Interfaces.  There are many such libraries.  One of the earliest ones available for *nix machines was curses (ncurses).
+
+The ncurses library provides functions that allow you to build applications with  user interfaces that go beyond scrolling.   The library is used like any other library by including the header file and then using the functions that are provided by the library.  
+
+The ncurses library is installed on the SOCS computers and is usually installed by default with most linux and OS/X operating systems.
+
+
+\section*{Learning Outcomes \label{sec:Learning-Outcomes}}
+
+Upon successful completion of this review, you should be able to: 
+\begin{itemize}
+\item  compile and run a program that uses ncurses
+\item create a rudimentary ncurses program
+\end{itemize}
+
+\section*{Introduction \label{sec:Introduction}}
+
+An ncurses UI can involve  multiple windows and mice,  or they can be text based.   This introduction focusses on a single screen application that only uses the keyboard.    The library has far more capabilities than will be explored here.
+
+The basic structure of a c program using ncurses is the same as any c program with some required function calls.
+
+\begin{lstlisting}
+int main(void) 
+{
+   initscr();
+   noecho();
+   
+   //code to do things goes here, likely as function calls
+   
+   refresh();
+   getch(); //does nothing except wait for you to press a character so you can see the results on the screen
+   endwin();
+   return(0);
+}
+
+\end{lstlisting}
+
+When compiling an ncurses program you have to explicitly link to the curses library.
+\begin{lstlisting}
+gcc ncursesExample.c -lcurses
+\end{lstlisting}
+
+The call to the initscr() function initializes the ncurses UI environment with things like the size of the terminal, the kind of keyboard, the colours available, etc.  ncurses pulls those values from your operating system so you don't need to supply any parameters to the call.
+
+The call to noecho() causes ncurses not to display the keystrokes that the user types.  Sometimes that is the behaviour you want, sometimes it is not.  You can turn echo back on with a call to the echo() function.
+
+Ncurses maintains an internal representation of the information as well as the view that the user sees on the screen. As you change things in the view, you make calls to refresh() to tell ncurses to update the screen.  This is an important concept.  You might change many values or output strings and if they don't show up on the display it is probably because you neglected to call refresh().  Until refresh() is called the changes only exist in the internal representation.
+
+getch() is a function that returns a single character.  In this context it is used to prevent the program from ending until the user has pressed a key. Otherwise the example would exit before you had a chance to see any of the demonstrations.
+
+endwin() is the last function that should be called to shut down an ncurses UI.  If you forget the call to endwin()  your terminal prompt will likely behave strangely and may look funny.  If this happens (after your program ends)  type \textbf{stty sane} on the command prompt and your terminal should revert to normal behaviour.  Then edit your ncurses program to add a call to endwin().
+
+\section*{Getting Started \label{sec:Getting-Started}}
+
+This review has a code sample associated with it that can be found at:  \url{https://github.com/judiMc/programming_tools}  in the ncurses folder.
+One of the best wasy to get started with ncurses is to simply use it.     The example code is set up so that you can cut/paste in different simple demos, compile and run them to see how things work.
+
+The process for working in an ncurses UI is to think of the screen as a grid of positions where position 0,0 is top left.  You can move the 'cursor' (the current position) around the grid by supplying a location.  Moving the cursor does not change the visual look of the screen.    Most of the programming consists of getting input from the user,  moving the cursor based on whatever that input tells you,  providing some output to the user, and moving the cursor back to its default position,  then refreshing the screen.
+
+The functions you are likely to need most often (beyond the ones shown in the introduction) are:
+\begin{itemize}
+\item move()  //move the cursor
+\item moveaddch()  //moves the cursor then print a character
+\item getmaxyx()  //get the maximum dimensions of the text window (so you don't move past the boundaries..which will seg fault)
+\item mvprintw() //move the cursor then print a string.  
+\item printw() //prints a string at the current position
+\item getstr() //gets a string from the user
+\item getch() //gets a character from the user
+\item getcury() and getcurx()  // gets the current x or y position of the cursor 
+\item inch() //gets the character that is displayed at the current position of the cursor
+\item mvinch()  //gets the character that is displayed at the position moved to
+
+\end{itemize}
+
+
+\section*{Examples \label{sec:Examples}}
+
+There are two example programs provided in the github repo noted above.   To get you started,  the first one is replicated here.  
+
+\begin{lstlisting}
+#include <ncurses.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+
+
+
+refresh();
+getch(); //does nothing except wait for you to press a character so you can see the results on the screen
+endwin();
+return(0);
+}
+
+/*to use this example program,  cut/paste any one of the
+examples into the main method above.  put it between the comments.
+compile and run to see what happens.   You'll have to delete one to try 
+the next one*/
+
+/*---------------------------------------
+example one
+---------------------------------------*/
+/*
+
+initscr();
+printw("Hello World");
+
+*/
+/*---------------------------------------
+example two
+---------------------------------------*/
+/*
+
+initscr();
+for (i=1; i<10; i++)
+{
+   move(i, i*5);
+   printw("Hello World");
+
+}
+
+
+*/
+
+/*---------------------------------------
+example three
+---------------------------------------*/
+/* 
+
+initscr();
+move(4, 15);
+printw("Hello World")*/
+
+
+
+
+/*---------------------------------------
+example four
+---------------------------------------*/
+
+/*
+
+  int rows;
+  int cols; 
+  char * message;
+  char input[5];
+  int i;
+  int tall;
+  int wide;
+ 
+  initscr();
+  getmaxyx(stdscr, rows, cols);
+  message = "Enter the height ";
+  mvprintw(rows-2, 0, "%s", message);
+  getstr(input);
+  tall = (int)strtol(input, NULL, 10);
+  message = "Enter the width    ";
+  mvprintw(rows-2, 0, "%s", message);
+  getstr(input);
+  wide = (int)strtol(input, NULL, 10);
+  for (i=0; i<wide; i++)
+    {
+      mvaddch(0, i, '#');
+    }
+   for (i=0; i<tall; i++)
+   {
+     mvaddch(i, 0, '#');
+     mvaddch(i, wide, '#');
+   }
+   for (i=0; i<wide; i++)
+    {
+      mvaddch(tall, i, '#');
+    }
+
+
+*/
+\end{lstlisting}
+
+
+
+
+
+
+
+\section*{Additional Information}
+
+The following links can provide useful additional information on ncurses:
+
+\begin{itemize}
+\item \url{https://youtu.be/ipQPEoGztAM?list=PLkTXsX7igf8erbWGYT4iSAhpnJLJ0Nk5G}
+\item \url{http://edlinuxeditor.blogspot.ca/p/ncurses-library-tutorial.html}
+\item \url{http://invisible-island.net/ncurses/}
+\end{itemize}
+
+
+\end{document}
